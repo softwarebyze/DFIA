@@ -16,6 +16,9 @@ web-build/
 *.key
 *.mobileprovision
 
+ios
+android
+
 # Metro
 .metro-health-check*
 
@@ -33,3 +36,5 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+google-service-account.json
