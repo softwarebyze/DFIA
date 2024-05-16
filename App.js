@@ -45,11 +45,17 @@ export default function App() {
     const result = await RevenueCatUI.presentPaywallIfNeeded({
       requiredEntitlementIdentifier: "pro",
     });
-    if (result === RevenueCatUI.PAYWALL_RESULT.PURCHASED) {
+    if (
+      [
+        RevenueCatUI.PAYWALL_RESULT.PURCHASED,
+        RevenueCatUI.PAYWALL_RESULT.NOT_PRESENTED,
+        RevenueCatUI.PAYWALL_RESULT.RESTORED,
+      ].includes(result)
+    ) {
       alert("Calling angel...");
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
