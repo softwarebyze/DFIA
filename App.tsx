@@ -12,6 +12,7 @@ import {
 import RevenueCatUI from "react-native-purchases-ui";
 
 import Purchases from "react-native-purchases";
+import { CallButton } from "./components/CallButton";
 
 Purchases.setLogLevel(Purchases.LOG_LEVEL.VERBOSE);
 
@@ -42,6 +43,7 @@ export default function App() {
   }, []);
 
   const onPress = async () => {
+    console.log("onPress");
     const result = await RevenueCatUI.presentPaywallIfNeeded({
       requiredEntitlementIdentifier: "pro",
     });
@@ -58,17 +60,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={{
-          backgroundColor: "#EFFFB0",
-          paddingVertical: 15,
-          paddingHorizontal: 43,
-          borderRadius: 40,
-        }}
-        onPress={onPress}
-      >
-        <Text style={{ fontSize: 22 }}>Call an Angel</Text>
-      </TouchableOpacity>
+      
+      <CallButton onPress={onPress} phoneNumber="+12692085321" />
       <StatusBar style="auto" />
     </View>
   );
