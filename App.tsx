@@ -31,7 +31,7 @@ export default function App() {
       if (!process.env.EXPO_PUBLIC_RC_ANDROID) {
         Alert.alert(
           "Error configure RC",
-          "RevenueCat API key for ios not provided"
+          "RevenueCat API key for android not provided"
         );
       } else {
         Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_RC_ANDROID });
