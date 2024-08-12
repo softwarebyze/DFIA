@@ -18,27 +18,28 @@ Purchases.setLogLevel(Purchases.LOG_LEVEL.VERBOSE);
 export default function App() {
   useEffect(() => {
     if (Platform.OS === "ios") {
-      if (!process.env.EXPO_PUBLIC_RC_IOS) {
+      // @ts-ignore
+      const EXPO_PUBLIC_RC_IOS = process.env.EXPO_PUBLIC_RC_IOS!;
+      if (!EXPO_PUBLIC_RC_IOS) {
         Alert.alert(
           "Error configure RC",
           "RevenueCat API key for ios not provided"
         );
       } else {
-        console.log(process.env.EXPO_PUBLIC_RC_IOS);
-        Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_RC_IOS });
+        Purchases.configure({ apiKey: EXPO_PUBLIC_RC_IOS });
       }
     } else if (Platform.OS === "android") {
-      if (!process.env.EXPO_PUBLIC_RC_ANDROID) {
+      // @ts-ignore
+      const EXPO_PUBLIC_RC_ANDROID = process.env.EXPO_PUBLIC_RC_ANDROID;
+      if (!EXPO_PUBLIC_RC_ANDROID) {
         Alert.alert(
           "Error configure RC",
           "RevenueCat API key for android not provided"
         );
       } else {
-        Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_RC_ANDROID });
+        Purchases.configure({ apiKey: EXPO_PUBLIC_RC_ANDROID });
       }
     }
-
-    Purchases.getOfferings().then(console.log);
   }, []);
 
   const onPress = async () => {
