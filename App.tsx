@@ -1,77 +1,34 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import {
-  Alert,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 
-import RevenueCatUI from "react-native-purchases-ui";
-
-import Purchases from "react-native-purchases";
-
-Purchases.setLogLevel(Purchases.LOG_LEVEL.VERBOSE);
+import { CallInfo } from "components/CallInfo";
+import { StreamCall } from "components/StreamCall";
+import { StreamVideo } from "components/StreamVideo";
+import { useState } from "react";
+import { CallContent } from "@stream-io/video-react-native-sdk";
+import { CallButton } from "components/CallButton";
+import { RevenueCat } from "components/RevenueCat";
 
 export default function App() {
-  useEffect(() => {
-    if (Platform.OS === "ios") {
-      // @ts-ignore
-      const EXPO_PUBLIC_RC_IOS = process.env.EXPO_PUBLIC_RC_IOS!;
-      if (!EXPO_PUBLIC_RC_IOS) {
-        Alert.alert(
-          "Error configure RC",
-          "RevenueCat API key for ios not provided"
-        );
-      } else {
-        Purchases.configure({ apiKey: EXPO_PUBLIC_RC_IOS });
-      }
-    } else if (Platform.OS === "android") {
-      // @ts-ignore
-      const EXPO_PUBLIC_RC_ANDROID = process.env.EXPO_PUBLIC_RC_ANDROID;
-      if (!EXPO_PUBLIC_RC_ANDROID) {
-        Alert.alert(
-          "Error configure RC",
-          "RevenueCat API key for android not provided"
-        );
-      } else {
-        Purchases.configure({ apiKey: EXPO_PUBLIC_RC_ANDROID });
-      }
-    }
-  }, []);
-
-  const onPress = async () => {
-    const result = await RevenueCatUI.presentPaywallIfNeeded({
-      requiredEntitlementIdentifier: "pro",
-    });
-    if (
-      [
-        RevenueCatUI.PAYWALL_RESULT.PURCHASED,
-        RevenueCatUI.PAYWALL_RESULT.NOT_PRESENTED,
-        RevenueCatUI.PAYWALL_RESULT.RESTORED,
-      ].includes(result)
-    ) {
-      alert("Calling angel...");
-    }
-  };
-
+  const [screen, setScreen] = useState<"welcome" | "call">("welcome");
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={{
-          backgroundColor: "#EFFFB0",
-          paddingVertical: 15,
-          paddingHorizontal: 43,
-          borderRadius: 40,
-        }}
-        onPress={onPress}
-      >
-        <Text style={{ fontSize: 22 }}>Call an Angel</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+    <RevenueCat>
+      <StreamVideo>
+        {screen === "welcome" ? (
+          <View style={styles.container}>
+            <CallButton onPress={() => setScreen("call")} />
+          </View>
+        ) : (
+          <StreamCall>
+            <SafeAreaView style={{ flex: 1 }}>
+              <CallInfo />
+              <CallContent onHangupCallHandler={() => setScreen("welcome")} />
+            </SafeAreaView>
+          </StreamCall>
+        )}
+        <StatusBar style="auto" />
+      </StreamVideo>
+    </RevenueCat>
   );
 }
 
