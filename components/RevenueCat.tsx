@@ -35,7 +35,7 @@ const useConfigureRevenueCat = () =>
 
 export const RevenueCat = ({ children }: { children: React.ReactNode }) => {
   useConfigureRevenueCat();
-  return <>{children}</>;
+  return children;
 };
 
 export const presentProPaywall = async (): Promise<boolean> => {
