@@ -1,6 +1,12 @@
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 // Import the functions you need from the SDKs you need
 import { analytics } from "analytics";
 import { initializeApp } from "firebase/app";
+import {
+  getReactNativePersistence,
+  initializeAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,8 +29,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const functions = getFunctions(app);
+
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
 
 export const getStreamUserToken = async () => {
   analytics.track("getStreamUserToken", {});
@@ -33,4 +42,9 @@ export const getStreamUserToken = async () => {
     "ext-auth-chat-getStreamUserToken"
   )();
   return tokenResponse.data?.toString() as string;
+};
+
+export const signIn = async (email: string, password: string) => {
+  analytics.track("signIn", { email });
+  return signInWithEmailAndPassword(auth, email, password);
 };

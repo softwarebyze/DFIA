@@ -5,14 +5,11 @@ import {
 } from "@stream-io/video-react-native-sdk";
 import { useState } from "react";
 
-// const callId = "my-call-id";
-const testCallId = "audio_room_5c5b8ef3-7332-4df1-baf5-88a536027ecb";
-
 export const StreamCall = ({
-  callId = testCallId,
+  callId,
   children,
 }: {
-  callId?: Call["id"];
+  callId: Call["id"];
   children: React.ReactNode;
 }) => {
   const client = useStreamVideoClient()!;
