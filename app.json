@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "DFIA",
+    "scheme": "dfia",
     "slug": "DFIA",
     "version": "1.0.0",
     "orientation": "portrait",
