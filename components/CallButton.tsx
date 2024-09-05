@@ -19,6 +19,7 @@ export const CallButton = (props: { onPress: () => void }) => {
         paddingVertical: 15,
         paddingHorizontal: 43,
         borderRadius: 40,
+        borderWidth: 1,
       }}
       onPress={onPress}
     >
