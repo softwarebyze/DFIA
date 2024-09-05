@@ -38,6 +38,15 @@
             "minSdkVersion": 24
           }
         }
+      ],
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          // optionally you can add your own explanations for permissions on iOS
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
+        }
       ]
     ]
   }
