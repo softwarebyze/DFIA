@@ -27,7 +27,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
 
 export default function App() {
   const [screen, setScreen] = useState<"welcome" | "call">("welcome");
