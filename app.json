@@ -54,7 +54,6 @@
           }
         }
       ],
-      "@config-plugins/react-native-callkeep",
       "@react-native-firebase/app",
       [
         "@config-plugins/react-native-webrtc",
