@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleProp,
+  Switch,
   Text,
   TextInput,
   TextStyle,
@@ -19,9 +20,10 @@ import {
 } from "react-native";
 
 export const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("angel@test.com");
+  const [password, setPassword] = useState("123456");
   const [username, setUsername] = useState("");
+  const [mode, setMode] = useState<"login" | "signup">("login");
 
   const createUser = async () => {
     analytics.track("createUser", { email, username });
@@ -41,6 +43,24 @@ export const SignIn = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={$container}
     >
+      <View
+        style={{
+          flexDirection: "row",
+          alignSelf: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <Text style={$label}>Sign In</Text>
+        <Switch
+          value={mode === "signup"}
+          onChange={() =>
+            setMode((prev) => (prev === "login" ? "signup" : "login"))
+          }
+        />
+        <Text style={$label}>Sign Up</Text>
+      </View>
       <View style={$inputs}>
         <Text style={$label}>Email</Text>
         <TextInput
@@ -59,16 +79,20 @@ export const SignIn = () => {
           secureTextEntry
           onChangeText={setPassword}
         />
-        <Text style={$label}>Username</Text>
-        <TextInput
-          style={$input}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-        />
+        {mode === "signup" && (
+          <>
+            <Text style={$label}>Username</Text>
+            <TextInput
+              style={$input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+            />
+          </>
+        )}
       </View>
-      <Button title="Sign up" onPress={createUser} />
-      <Button title="Sign in" onPress={signIn} />
+      {mode === "signup" && <Button title="Sign up" onPress={createUser} />}
+      {mode === "login" && <Button title="Sign in" onPress={signIn} />}
     </KeyboardAvoidingView>
   );
 };

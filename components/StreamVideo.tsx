@@ -28,13 +28,26 @@ export const StreamVideo = ({
       tokenProvider: getStreamUserToken,
     });
 
+    // myClient.state.getCurrentValue()
+
+    
+    // myClient.on("call.created", console.log);
+    const custom= myClient?.state.connectedUser?.custom
+    const custom1= myClient.streamClient.user?.custom
+    
+    analytics.track("StreamVideoClientCreated", {
+      custom,
+      custom1
+    });
+
     setClient(myClient);
 
     return () => {
+      console.log("Disconnecting user from StreamVideo");
       myClient.disconnectUser();
       setClient(undefined);
     };
-  }, []);
+  }, [user.uid]);
 
   if (!client) {
     analytics.track("StreamVideoClientNotReady", {});

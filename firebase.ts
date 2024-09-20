@@ -1,6 +1,6 @@
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 // Import the functions you need from the SDKs you need
-import { analytics } from "analytics";
+// import { analytics } from "analytics";
 import { initializeApp } from "firebase/app";
 import {
   getReactNativePersistence,
@@ -36,7 +36,7 @@ export const auth = initializeAuth(app, {
 });
 
 export const getStreamUserToken = async () => {
-  analytics.track("getStreamUserToken", {});
+  // analytics.track("getStreamUserToken", {});
   const tokenResponse = await httpsCallable(
     functions,
     "ext-auth-chat-getStreamUserToken"
@@ -45,6 +45,6 @@ export const getStreamUserToken = async () => {
 };
 
 export const signIn = async (email: string, password: string) => {
-  analytics.track("signIn", { email });
+  // analytics.track("signIn", { email });
   return signInWithEmailAndPassword(auth, email, password);
 };
