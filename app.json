@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.zackebenfeld.DFIA"
+      "package": "com.zackebenfeld.DFIA",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,10 +38,24 @@
         {
           "android": {
             "minSdkVersion": 24
+          },
+          "ios": {
+            "useFrameworks": "static"
           }
         }
       ],
-      "@stream-io/video-react-native-sdk",
+      [
+        "@stream-io/video-react-native-sdk",
+        {
+          "ringingPushNotifications": {
+            "disableVideoIos": false,
+            "includesCallsInRecentsIos": false,
+            "showWhenLockedAndroid": true
+          }
+        }
+      ],
+      "@config-plugins/react-native-callkeep",
+      "@react-native-firebase/app",
       [
         "@config-plugins/react-native-webrtc",
         {
