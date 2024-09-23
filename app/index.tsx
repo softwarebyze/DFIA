@@ -27,7 +27,10 @@ import {
   Text,
   View,
 } from "react-native";
+import { setPushConfig } from "utils/setPushConfig";
 import { auth } from "../firebase";
+
+setPushConfig();
 
 export default function App() {
   const [screen, setScreen] = useState<"welcome" | "call">("welcome");
