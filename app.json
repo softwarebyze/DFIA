@@ -55,7 +55,6 @@
           }
         }
       ],
-      "@react-native-firebase/app",
       [
         "@config-plugins/react-native-webrtc",
         {
