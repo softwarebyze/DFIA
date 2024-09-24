@@ -18,6 +18,16 @@ export const StreamCall = ({
 
   const [call] = useState(() => {
     const call = client?.call("default", callId);
+    (async () =>
+      await call.getOrCreate({
+        ring: true,
+        data: {
+          members: [
+            { user_id: client.streamClient.userID! },
+            { user_id: "vmljsmXYDBMloSozpWUxZSQdSHj2" },
+          ],
+        },
+      }))();
     call.join({ create: true });
     return call;
   });

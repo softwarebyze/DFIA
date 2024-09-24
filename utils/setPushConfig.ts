@@ -63,6 +63,7 @@ import { getStreamUserToken } from 'firebase';
         // you can call your server to get the user data or token or retrieve from offline storage.
         const userId = await AsyncStorage.getItem('@userId');
         const userName = await AsyncStorage.getItem('@userName');
+        console.log("userId", userId);
         if (!userId) return undefined;
         // an example promise to fetch token from your server
         const user = { id: userId, name: userName ?? undefined };
