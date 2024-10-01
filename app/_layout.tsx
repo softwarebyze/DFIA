@@ -3,7 +3,11 @@ import { RevenueCat } from "components/RevenueCat";
 import { Slot } from "expo-router";
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
+import { setPushConfig } from "utils/setPushConfig";
 import { auth } from "../firebase";
+// import { OverlayProvider } from "
+
+setPushConfig();
 
 interface AuthContextValue {
   user: User | null;
@@ -30,7 +34,9 @@ export default function RootLayout() {
   return (
     <AuthContext.Provider value={{ user, isLoading }}>
       <RevenueCat>
+        {/* <OverlayProvider> */}
         <Slot />
+        {/* </OverlayProvider> */}
       </RevenueCat>
     </AuthContext.Provider>
   );

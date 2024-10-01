@@ -4,12 +4,29 @@ import { Screen } from "components/Screen";
 import { SignIn } from "components/SignIn";
 import { useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  PermissionsAndroid,
+  Platform,
+  Text,
+  View,
+} from "react-native";
 import { AuthContext } from "./_layout";
 
 export default function Index() {
   const { user, isLoading } = useContext(AuthContext);
   const router = useRouter();
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      if (Platform.OS !== "android") return;
+      const res = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+      console.log(res); // 'granted' | 'denied' | 'never_ask_again'
+    };
+    requestPermissions();
+  }, []);
 
   useEffect(() => {
     if (!isLoading && user) {
