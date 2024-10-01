@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1064247809898",
+    "project_id": "dfia-a8460",
+    "storage_bucket": "dfia-a8460.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064247809898:android:6aa9b13282d92a5c4c3713",
+        "android_client_info": {
+          "package_name": "com.zackebenfeld.DFIA"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm-otswqI-5_otHdJEisHorzBYMIfLggo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

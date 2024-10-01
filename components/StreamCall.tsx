@@ -3,7 +3,9 @@ import {
   StreamCall as StreamCallOriginal,
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const angelUserIds = ["vmljsmXYDBMloSozpWUxZSQdSHj2"];
 
 export const StreamCall = ({
   callId,
@@ -16,11 +18,30 @@ export const StreamCall = ({
 
   if (!client) throw new Error("Client not found", client);
 
-  const [call] = useState(() => {
-    const call = client?.call("default", callId);
-    call.join({ create: true });
-    return call;
-  });
+  const [call, setCall] = useState<Call>();
+
+  useEffect(() => {
+    const getOrCreateCall = async () => {
+      const call = client?.call("default", callId);
+      const isAngel = angelUserIds.includes(client.streamClient.userID!);
+      console.log("isAngel: ", isAngel);
+      const members = isAngel
+        ? []
+        : [
+            { user_id: client.streamClient.userID! },
+            { user_id: "vmljsmXYDBMloSozpWUxZSQdSHj2" },
+          ];
+      await call.getOrCreate({
+        ring: true,
+        data: {
+          members,
+        },
+      });
+      call.join();
+      setCall(call);
+    };
+    getOrCreateCall();
+  }, []);
 
   if (!call) return null;
 

@@ -7,7 +7,6 @@ import {
   StreamVideoClient,
   StreamVideo as StreamVideoOfficial,
 } from "@stream-io/video-react-native-sdk";
-import { analytics } from "analytics";
 import { getStreamUserToken } from "firebase";
 import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
@@ -37,7 +36,6 @@ export const StreamVideo = ({
   }, []);
 
   if (!client) {
-    analytics.track("StreamVideoClientNotReady", {});
     return null;
   }
 

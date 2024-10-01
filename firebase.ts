@@ -36,7 +36,6 @@ export const auth = initializeAuth(app, {
 });
 
 export const getStreamUserToken = async () => {
-  analytics.track("getStreamUserToken", {});
   const tokenResponse = await httpsCallable(
     functions,
     "ext-auth-chat-getStreamUserToken"
