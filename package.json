@@ -7,8 +7,10 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "secrets:push": "eas secret:push --scope project --env-file .env.local"
-  },
+    "secrets:push": "eas secret:push --scope project --env-file .env.local",
+    "ship": "eas build --platform ios --auto-submit",
+    "ship:android": "eas build --platform android --auto-submit --non-interactive"
+},
   "dependencies": {
     "@config-plugins/react-native-callkeep": "^8.0.0",
     "@config-plugins/react-native-webrtc": "^9.0.0",
