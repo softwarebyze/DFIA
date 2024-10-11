@@ -92,7 +92,5 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
     init();
   }, []);
 
-  console.log({isReady})
-
   return <>{children}</>;
 }
