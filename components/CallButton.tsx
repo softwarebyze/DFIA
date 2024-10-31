@@ -4,10 +4,10 @@ import { Text, TouchableOpacity } from "react-native";
 
 export const CallButton = (props: { onPress: () => void }) => {
   const onPress = async () => {
-    const isSubscribed = await presentProPaywall();
-    if (isSubscribed || __DEV__) {
+    const isSubscribed = __DEV__ ? true : await presentProPaywall();
+    if (isSubscribed) {
       props.onPress();
-      analytics.track("call_an_angel", {
+      analytics.track("[CallButton] call_an_angel", {
         call_id: "call-id",
       });
     }

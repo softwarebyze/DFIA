@@ -1,4 +1,3 @@
-import notifee from "@notifee/react-native";
 import {
   CallingState,
   StreamCall,
@@ -6,8 +5,8 @@ import {
   useCalls,
   useCallStateHooks,
 } from "@stream-io/video-react-native-sdk";
-import { Link } from "expo-router";
-import React from "react";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import React, { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 
 export const Calls = () => {
@@ -19,15 +18,29 @@ export const Calls = () => {
       call.state.callingState === CallingState.RINGING
   );
 
-  if (firstIncomingCall) {
-    notifee.displayNotification({
-      title: "Incoming Call",
-      body: "You have an incoming call",
-      android: {
-        channelId: "default-channel-id",
-      },
-    });
-  }
+  const joinedCalls = calls.filter(
+    (call) => call.state.callingState === CallingState.JOINED
+  );
+
+  const navigateToCall = (callId: string) => {
+    router.replace(`/home/${callId}`);
+  };
+
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params.join && firstIncomingCall?.id) {
+      navigateToCall(firstIncomingCall.id);
+    }
+  }, [params.join, firstIncomingCall?.id]);
+
+  useEffect(() => {
+    const joinedCall = joinedCalls[0];
+    if (joinedCall && params.join) {
+      console.log("[Calls] joinedCalls: ", joinedCalls.length);
+      navigateToCall(joinedCall.id);
+    }
+  }, [joinedCalls, params.join]);
 
   return (
     <View>
@@ -58,12 +71,14 @@ export const CallCard = () => {
     useParticipants,
     useCallCreatedAt,
     useParticipantCount,
+    useCallMembers,
   } = useCallStateHooks();
 
   const callingState = useCallCallingState();
   const participants = useParticipants();
   const createdAt = useCallCreatedAt();
   const participantCount = useParticipantCount();
+  const members = useCallMembers();
 
   if (!call) return;
   return (
@@ -82,6 +97,7 @@ export const CallCard = () => {
         <View>
           <Text>{callingState}</Text>
           <Text>{participantCount} Participants</Text>
+          <Text>{members.length} Members</Text>
           {participants.map((participant) => (
             <Text key={participant.userId}>
               {participant.name || participant.userId}

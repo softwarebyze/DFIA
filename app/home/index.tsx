@@ -1,11 +1,8 @@
-// app/home/index.tsx
-import notifee, { AndroidImportance } from "@notifee/react-native";
-import { colorPallet } from "@stream-io/video-react-native-sdk";
+import { colorPallet, StreamVideoRN } from "@stream-io/video-react-native-sdk";
 import { analytics } from "analytics";
 import { CallButton } from "components/CallButton";
 import { Calls } from "components/Calls";
 import { Screen } from "components/Screen";
-import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import {
@@ -26,39 +23,6 @@ import {
 } from "react-native";
 import { auth } from "../../firebase";
 import { AuthContext } from "../_layout";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
-const NotificationDemoButton = () => (
-  <Button
-    title="Show Notification"
-    onPress={async () => {
-      const title = "Notification Title";
-      const message = { message: { text: "This is a notification message" } };
-      const remoteMessage = { data: {} };
-      const channelId = "default-channel-id";
-
-      await notifee.displayNotification({
-        title,
-        body: message.message.text,
-        data: remoteMessage.data,
-        android: {
-          channelId,
-          pressAction: {
-            id: "default",
-          },
-          importance: AndroidImportance.HIGH,
-        },
-      });
-    }}
-  />
-);
 
 const deleteAccount = async (user: User) => {
   analytics.track("deleteAccount", { user });
@@ -120,6 +84,11 @@ export default function Home() {
     }
   }, [user, isLoading]);
 
+  const logOut = async () => {
+    await StreamVideoRN.onPushLogout();
+    signOut(auth);
+  };
+
   if (isLoading) {
     // Optionally display a loading indicator
     return (
@@ -139,7 +108,7 @@ export default function Home() {
       <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />
       <Calls />
       <View style={{ gap: 22, marginVertical: 40 }}>
-        <Button title="Sign out" onPress={() => signOut(auth)} />
+        <Button title="Sign out" onPress={logOut} />
         <Button
           title="Delete account"
           onPress={() => deleteAccount(user!)} // Non-null assertion since user is non-null here

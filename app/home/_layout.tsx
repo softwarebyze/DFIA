@@ -1,97 +1,64 @@
 // app/home/_layout.tsx
-import notifee from "@notifee/react-native";
+import messaging from "@react-native-firebase/messaging";
 import NotificationsProvider from "components/NotificationsProvider";
 import { StreamVideo } from "components/StreamVideo";
-import { Slot, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { AuthContext } from "../_layout";
 
 export default function AuthenticatedLayout() {
-  console.log("authenticated layout");
   const { user, isLoading } = useContext(AuthContext);
-  console.log({ user, isLoading });
   const router = useRouter();
 
   useEffect(() => {
-    const registerPushToken = async () => {
-      const res = await notifee.requestPermission();
-      console.log(res);
-      // const token = await messaging().getToken();
-      // console.log("token", token);
-      //   await messaging().requestPermission();
-      //   if (!messaging().isDeviceRegisteredForRemoteMessages) {
-      //     console.log("!messaging().isDeviceRegisteredForRemoteMessages");
-      //     await messaging().registerDeviceForRemoteMessages();
-      //   }
-      //   let token = null;
-      //   try {
-      //     token = await messaging().getToken();
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      //   if (!token) {
-      //     console.warn("No token");
-      //     return;
-      //   }
+    // `onNotificationOpenedApp` gets called when app is in background, and you press
+    // the push notification.
+    //
+    // Here its assumed a message-notification contains a "channel" property in the data payload.
+    //
+    // Please check the docs on push template:
+    // https://getstream.io/chat/docs/javascript/push_template/?language=javascript
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "[home/_layout:messaging().onNotificationOpenedApp] Notification caused app to open from background state:",
+        remoteMessage
+      );
+      // const channel = JSON.parse(remoteMessage.data.channel);
+      // const message = remoteMessage.data.message;
 
-      //   const push_provider: PushProvider = Platform.select({
-      //     ios: "apn",
-      //     android: "firebase",
-      //     web: "firebase",
-      //     macos: "apn",
-      //     windows: "firebase",
-      //     native: "firebase",
-      //   });
-      //   const push_provider_name = "admin_sdk_services_key"; // name an alias for your push provider (optional)
+      // console.log('This message belongs to channel with id - ', channel.id);
+      // console.log('Message id is', message);
 
-      //   if (token) {
-      //     await AsyncStorage.setItem("@current_push_token", token);
-      //     try {
-      //       await client.addDevice(
-      //         token,
-      //         push_provider,
-      //         user?.uid,
-      //         // push_provider_name is meant for optional multiple providers support, see: https://getstream.io/chat/docs/react/push_providers_and_multi_bundle
-      //         push_provider_name
-      //       );
-      //     } catch (error) {}
-      //   }
+      // You will add your navigation logic, to navigate to relevant channel screen.
+    });
 
-      //   const removeOldToken = async () => {
-      //     const oldToken = await AsyncStorage.getItem("@current_push_token");
-      //     if (oldToken !== null) {
-      //       await client.removeDevice(oldToken);
-      //     }
-      //   };
+    // `getInitialNotification` gets called when app is in quit state, and you press
+    // the push notification.
+    //
+    //
+    // Here its assumed that a message-notification contains a "channel" property in the data payload.
+    // Please check the docs on push template:
+    // https://getstream.io/chat/docs/javascript/push_template/?language=javascript
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quite state:",
+            remoteMessage
+          );
+          // const channel = JSON.parse(remoteMessage.data.channel);
+          // const message = remoteMessage.data.message;
 
-      //   unsubscribeTokenRefreshListenerRef.current = messaging().onTokenRefresh(
-      //     async (newToken) => {
-      //       console.log("onTokenRefresh");
-      //       await Promise.all([
-      //         removeOldToken(),
-      //         client.addDevice(
-      //           newToken,
-      //           push_provider,
-      //           auth().currentUser?.uid,
-      //           push_provider_name
-      //         ),
-      //         AsyncStorage.setItem("@current_push_token", newToken),
-      //       ]);
-      //     }
-      //   );
-    };
+          // console.log('This message belongs to channel with id - ', channel.id);
+          // console.log('Message id is', message);
 
-    const init = async () => {
-      await registerPushToken();
-    };
-
-    init();
-
-    // return () => {
-    //   console.log("unsubscribing from messaging");
-    //   unsubscribeTokenRefreshListenerRef.current?.();
-    // };
+          // You will add your navigation logic, to navigate to relevant channel screen.
+        } else {
+          console.log("No initial notification", remoteMessage);
+        }
+      });
   }, []);
 
   useEffect(() => {
@@ -113,7 +80,7 @@ export default function AuthenticatedLayout() {
   return (
     <StreamVideo user={user}>
       <NotificationsProvider>
-        <Slot />
+        <Stack screenOptions={{ headerTitle: "" }} />
       </NotificationsProvider>
     </StreamVideo>
   );

@@ -3,17 +3,18 @@
 const apiKey = process.env.EXPO_PUBLIC_STREAM_API_KEY!;
 
 import { AndroidImportance } from "@notifee/react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StreamVideoClient,
   StreamVideoRN,
 } from "@stream-io/video-react-native-sdk";
-import { getStreamUserToken } from "firebase";
-import { staticNavigateToRingingCall } from "./staticNavigation";
+import { auth, getStreamUserToken } from "firebase";
+import {
+  staticNavigateToCall,
+  staticNavigateToRingingCall,
+} from "./staticNavigation";
 
 export function setPushConfig() {
   StreamVideoRN.setPushConfig({
-    // pass true to inform the SDK that this is an expo app
     isExpo: true,
     ios: {
       // add your push_provider_name for iOS that you have setup in Stream dashboard
@@ -46,31 +47,36 @@ export function setPushConfig() {
     },
     // add the callback to be executed a call is accepted, used for navigation
     navigateAcceptCall: () => {
-      staticNavigateToRingingCall();
-      console.log("Call Accepted");
+      console.log("[navigateAcceptCall] Call Accepted");
+      staticNavigateToCall();
+      console.log("[navigateAcceptCall] Navigated to Call");
     },
     // add the callback to be executed when a notification is tapped,
     // but the user did not press accept or decline, used for navigation
     navigateToIncomingCall: () => {
+      console.log("[navigateToIncomingCall] Navigated to Incoming Call");
       staticNavigateToRingingCall();
-      console.log("Navigated to Incoming Call");
     },
     // add the async callback to create a video client
     // for incoming calls in the background on a push notification
     createStreamVideoClient: async () => {
+      console.log("createStreamVideoClient");
       // note that since the method is async,
       // you can call your server to get the user data or token or retrieve from offline storage.
-      const userId = await AsyncStorage.getItem("@userId");
-      const userName = await AsyncStorage.getItem("@userName");
+      const { currentUser } = auth;
+      const userId = currentUser?.uid;
+      const userName = currentUser?.displayName;
       console.log("userId", userId);
       if (!userId) return undefined;
-      // an example promise to fetch token from your server
       const user = { id: userId, name: userName ?? undefined };
-      return new StreamVideoClient({
+      return StreamVideoClient.getOrCreateInstance({
         apiKey, // pass your stream api key
         user,
         tokenProvider: getStreamUserToken,
       });
+    },
+    onTapNonRingingCallNotification: () => {
+      console.log("[onTapNonRingingCallNotification]");
     },
   });
 }

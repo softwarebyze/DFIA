@@ -16,6 +16,7 @@ export const CallInfo = () => {
       <Text>Call: {call?.cid}</Text>
       <Text>State: {callingState}</Text>
       <Text>Participants: {participants.length}</Text>
+      <Text>Members: {members.length}</Text>
       {members.map((member) => (
         <Text key={member.user_id}>{member.user.name}</Text>
       ))}
