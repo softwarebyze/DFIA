@@ -76,7 +76,7 @@ export default function AuthenticatedLayout() {
       </View>
     );
   }
-
+  console.log("AuthdLayout", user.uid);
   return (
     <StreamVideo user={user}>
       <NotificationsProvider>
