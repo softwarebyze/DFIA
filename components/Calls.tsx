@@ -6,8 +6,9 @@ import {
   useCallStateHooks,
 } from "@stream-io/video-react-native-sdk";
 import { Link, router, useLocalSearchParams } from "expo-router";
-import React, { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import  { useEffect } from "react";
+import { Text } from '~/components/nativewindui/Text';
+import { Pressable, View } from "react-native";
 
 export const Calls = () => {
   const calls = useCalls();

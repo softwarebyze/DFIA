@@ -2,14 +2,19 @@ import notifee from "@notifee/react-native";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
-import { RevenueCat } from "components/RevenueCat";
+import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
+import "expo-dev-client";
 import { Slot, useRouter } from "expo-router";
-import { getStreamUserToken } from "firebase";
+import { StatusBar } from "expo-status-bar";
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { setPushConfig } from "utils/setPushConfig";
-import { auth } from "../firebase";
+import { RevenueCat } from "~/components/RevenueCat";
+import { auth, getStreamUserToken } from "~/firebase";
+import { useColorScheme, useInitialAndroidBarSync } from "~/lib/useColorScheme";
+import { NAV_THEME } from "~/theme";
+import "../global.css";
 
 setPushConfig();
 
@@ -138,7 +143,15 @@ function useNotificationObserver() {
   return onMessageUnsubscribe;
 }
 
+export {
+  // Catch any errors thrown by the Layout component.
+  ErrorBoundary
+} from "expo-router";
+
 export default function RootLayout() {
+  useInitialAndroidBarSync();
+  const { colorScheme, isDarkColorScheme } = useColorScheme();
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -153,12 +166,21 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
-      <RevenueCat>
-        {/* <OverlayProvider> */}
-        <Slot />
-        {/* </OverlayProvider> */}
-      </RevenueCat>
-    </AuthContext.Provider>
+    <>
+      <StatusBar
+        key={`root-status-bar-${isDarkColorScheme ? "light" : "dark"}`}
+        style={isDarkColorScheme ? "light" : "dark"}
+      />
+
+      <NavThemeProvider value={NAV_THEME[colorScheme]}>
+        <AuthContext.Provider value={{ user, isLoading }}>
+          <RevenueCat>
+            {/* <OverlayProvider> */}
+            <Slot />
+            {/* </OverlayProvider> */}
+          </RevenueCat>
+        </AuthContext.Provider>
+      </NavThemeProvider>
+    </>
   );
 }

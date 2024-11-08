@@ -13,7 +13,8 @@ import { CallInfo } from "components/CallInfo";
 import { StreamCall } from "components/StreamCall";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
-import { SafeAreaView, Text } from "react-native";
+import { Text } from '~/components/nativewindui/Text';
+import { SafeAreaView } from "react-native";
 import { AuthContext } from "../_layout";
 
 const angelUserIds = ["vmljsmXYDBMloSozpWUxZSQdSHj2"];

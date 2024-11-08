@@ -1,10 +1,11 @@
 // app/index.tsx
-import { colorPallet } from "@stream-io/video-react-native-sdk";
-import { Screen } from "components/Screen";
+import { Text } from "~/components/nativewindui/Text";
+
 import { SignIn } from "components/SignIn";
 import { useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
+import { Screen } from "~/components/Screen";
 import { AuthContext } from "./_layout";
 
 export default function Index() {
@@ -28,25 +29,10 @@ export default function Index() {
 
   return (
     <Screen>
-      <Text
-        style={{
-          color: colorPallet.dark.primary,
-          fontSize: 48,
-          fontWeight: "bold",
-          fontStyle: "italic",
-        }}
-      >
+      <Text variant="largeTitle" className="text-primary font-bold italic">
         DFIA
       </Text>
-      <Text
-        style={{
-          color: colorPallet.dark.secondary,
-          fontSize: 24,
-          marginBottom: 28,
-        }}
-      >
-        Don't Face It Alone
-      </Text>
+      <Text className="text-secondary text-2 mb-8">Don't Face It Alone</Text>
       <SignIn />
     </Screen>
   );

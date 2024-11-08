@@ -1,5 +1,5 @@
 import { useCall, useCallStateHooks, useConnectedUser } from "@stream-io/video-react-native-sdk";
-import { Text } from "react-native";
+import { Text } from '~/components/nativewindui/Text';
 
 export const CallInfo = () => {
   const call = useCall();

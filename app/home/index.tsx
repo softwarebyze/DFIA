@@ -13,12 +13,13 @@ import {
   User,
 } from "firebase/auth";
 import { useContext, useEffect } from "react";
+import { Text } from '~/components/nativewindui/Text';
 import {
   ActivityIndicator,
   Alert,
   AlertButton,
   Button,
-  Text,
+
   View,
 } from "react-native";
 import { auth } from "../../firebase";
@@ -102,7 +103,7 @@ export default function Home() {
 
   return (
     <Screen style={{ gap: 20, justifyContent: "space-between" }}>
-      <Text style={{ fontSize: 42, marginVertical: 30 }}>
+      <Text style={{ fontSize: 42, }}>
         Hi, {user?.displayName}
       </Text>
       <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />

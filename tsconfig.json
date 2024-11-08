@@ -3,6 +3,9 @@
     "baseUrl": "./",
     "strict": true,
     "paths": {
+      "~/*": [
+        "*"
+      ],
       // https://stackoverflow.com/a/77021337/19964242
       "@firebase/auth": [
         "./node_modules/@firebase/auth/dist/index.rn.d.ts"
@@ -14,6 +17,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
   ]
 }

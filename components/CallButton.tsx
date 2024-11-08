@@ -1,6 +1,7 @@
 import { analytics } from "analytics";
 import { presentProPaywall } from "components/RevenueCat";
-import { Text, TouchableOpacity } from "react-native";
+import { Text } from '~/components/nativewindui/Text';
+import {  TouchableOpacity } from "react-native";
 
 export const CallButton = (props: { onPress: () => void }) => {
   const onPress = async () => {

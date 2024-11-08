@@ -6,12 +6,13 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { useState } from "react";
+import { Text } from '~/components/nativewindui/Text';
 import {
   Button,
   KeyboardAvoidingView,
   Platform,
   StyleProp,
-  Text,
+
   TextInput,
   TextStyle,
   View,
