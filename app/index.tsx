@@ -1,10 +1,9 @@
 // app/index.tsx
-import { Text } from "~/components/nativewindui/Text";
-
 import { SignIn } from "components/SignIn";
 import { useRouter } from "expo-router";
 import { useContext, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import { Text } from "~/components/nativewindui/Text";
 import { Screen } from "~/components/Screen";
 import { AuthContext } from "./_layout";
 

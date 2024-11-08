@@ -3,7 +3,7 @@ import { analytics } from "analytics";
 import { CallButton } from "components/CallButton";
 import { Calls } from "components/Calls";
 import { Screen } from "components/Screen";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import {
   deleteUser,
@@ -13,15 +13,15 @@ import {
   User,
 } from "firebase/auth";
 import { useContext, useEffect } from "react";
-import { Text } from '~/components/nativewindui/Text';
 import {
   ActivityIndicator,
   Alert,
   AlertButton,
   Button,
-
+  StatusBar,
   View,
 } from "react-native";
+import { Text } from "~/components/nativewindui/Text";
 import { auth } from "../../firebase";
 import { AuthContext } from "../_layout";
 
@@ -102,20 +102,27 @@ export default function Home() {
   const getNewCallId = () => `${Date.now()}-${user?.displayName}`;
 
   return (
-    <Screen style={{ gap: 20, justifyContent: "space-between" }}>
-      <Text style={{ fontSize: 42, }}>
-        Hi, {user?.displayName}
-      </Text>
-      <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />
-      <Calls />
-      <View style={{ gap: 22, marginVertical: 40 }}>
-        <Button title="Sign out" onPress={logOut} />
-        <Button
-          title="Delete account"
-          onPress={() => deleteAccount(user!)} // Non-null assertion since user is non-null here
-          color={colorPallet.dark.error}
-        />
-      </View>
-    </Screen>
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Screen
+        style={{
+          gap: 20,
+          justifyContent: "space-between",
+          paddingTop: StatusBar.currentHeight,
+        }}
+      >
+        <Text variant="largeTitle">Hi, {user?.displayName}</Text>
+        <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />
+        <Calls />
+        <View style={{ gap: 22, marginVertical: 40 }}>
+          <Button title="Sign out" onPress={logOut} />
+          <Button
+            title="Delete account"
+            onPress={() => deleteAccount(user!)} // Non-null assertion since user is non-null here
+            color={colorPallet.dark.error}
+          />
+        </View>
+      </Screen>
+    </>
   );
 }
