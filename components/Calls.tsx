@@ -23,7 +23,7 @@ export const Calls = () => {
   );
 
   const navigateToCall = (callId: string) => {
-    router.replace(`/home/${callId}`);
+    router.replace(`/home/join-call/${callId}`);
   };
 
   const params = useLocalSearchParams();
@@ -82,7 +82,7 @@ export const CallCard = () => {
 
   if (!call) return;
   return (
-    <Link asChild href={`/home/${call.id}`}>
+    <Link asChild href={`/home/join-call/${call.id}`}>
       <Pressable
         style={{
           padding: 8,

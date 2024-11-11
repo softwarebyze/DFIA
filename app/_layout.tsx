@@ -38,7 +38,7 @@ function useNotificationObserver() {
     }
     const [_callType, callId] = callCid.split(":");
     console.log("[onMessage] Navigating to call with cid:", callId);
-    router.replace(`/home/${callId}`);
+    // router.replace(`/home/${callId}`);
     // return onNotifeeMessageReceived(message);
   };
 
