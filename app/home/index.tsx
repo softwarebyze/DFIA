@@ -105,7 +105,7 @@ export default function Home() {
       <Text style={{ fontSize: 42, marginVertical: 30 }}>
         Hi, {user?.displayName}
       </Text>
-      <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />
+      <CallButton onPress={() => router.push(`/home/create-call`)} />
       <Calls />
       <View style={{ gap: 22, marginVertical: 40 }}>
         <Button title="Sign out" onPress={logOut} />
