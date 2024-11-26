@@ -1,17 +1,27 @@
-import notifee from "@notifee/react-native";
+import notifee, { AndroidImportance } from "@notifee/react-native";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
+import {
+  isExpoNotificationStreamVideoEvent,
+  oniOSExpoNotificationEvent,
+} from "@stream-io/video-react-native-sdk";
 import { RevenueCat } from "components/RevenueCat";
+import * as Notifications from "expo-notifications";
 import { Slot, useRouter } from "expo-router";
 import { getStreamUserToken } from "firebase";
 import { User, onAuthStateChanged } from "firebase/auth";
-import React, { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { Platform } from "react-native";
 import { StreamChat } from "stream-chat";
+import { setNotifeeListeners } from "utils/setNotifeeListeners";
 import { setPushConfig } from "utils/setPushConfig";
+import { setPushMessageListeners } from "utils/setPushMessageHandlers";
 import { auth } from "../firebase";
 
 setPushConfig();
+setNotifeeListeners();
+setPushMessageListeners();
 
 interface AuthContextValue {
   user: User | null;
@@ -101,6 +111,10 @@ function useNotificationObserver() {
       data,
       android: {
         channelId,
+        importance: AndroidImportance.HIGH,
+        fullScreenAction: {
+          id: "default",
+        },
         // add a press action to open the app on press
         pressAction: {
           id: "default",
@@ -127,6 +141,7 @@ function useNotificationObserver() {
     return true;
   };
 
+  // this stuff is old, new version is in utils/setPushMessageHandlers.ts
   // messaging().setBackgroundMessageHandler
   const onMessageUnsubscribe = messaging().onMessage(onMessage);
   messaging().setBackgroundMessageHandler(onNotifeeMessageReceived);
@@ -142,7 +157,28 @@ export default function RootLayout() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useNotificationObserver();
+  // useNotificationObserver();
+
+  useEffect(() => {
+    if (Platform.OS === "ios") {
+      const subscription = Notifications.addNotificationReceivedListener(
+        (notification) => {
+          console.log(
+            "Notifications.addNotificationReceivedListener",
+            notification
+          );
+          if (isExpoNotificationStreamVideoEvent(notification)) {
+            oniOSExpoNotificationEvent(notification);
+          } else {
+            // your other notifications (if any)
+          }
+        }
+      );
+      return () => {
+        subscription.remove();
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {

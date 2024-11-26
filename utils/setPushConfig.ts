@@ -8,10 +8,6 @@ import {
   StreamVideoRN,
 } from "@stream-io/video-react-native-sdk";
 import { auth, getStreamUserToken } from "firebase";
-import {
-  staticNavigateToCall,
-  staticNavigateToRingingCall,
-} from "./staticNavigation";
 
 export function setPushConfig() {
   StreamVideoRN.setPushConfig({
@@ -28,35 +24,55 @@ export function setPushConfig() {
       //   : 'firebase-video-production',
       pushProviderName: "firebase",
       // configure the notification channel to be used for incoming calls for Android.
-      incomingCallChannel: {
-        id: "stream_incoming_call",
-        name: "Incoming call notifications",
-        // This is the advised importance of receiving incoming call notifications.
-        // This will ensure that the notification will appear on-top-of applications.
+      // ** i changed incomingCallChannel to callChannel but i think this is only for non-ringing calls
+      // and i think we need to add incomingCallChannel back also
+      callChannel: {
+        id: "stream_call_notifications",
+        name: "Call notifications",
+        // This importance will ensure that the notification will appear on-top-of applications.
         importance: AndroidImportance.HIGH,
-        // optional: if you dont pass a sound, default ringtone will be used
-        // sound: <your sound url>
+        sound: "default",
       },
       // configure the functions to create the texts shown in the notification
-      // for incoming calls in Android.
-      incomingCallNotificationTextGetters: {
-        getTitle: (createdUserName: string) =>
-          `Incoming call from ${createdUserName}`,
-        getBody: (_createdUserName: string) => "Tap to answer the call",
+      // for non ringing calls in Android.
+      // ** same here, i changed incomingCallNotificationTextGetters to callNotificationTextGetters
+      // but i think we need to add incomingCallNotificationTextGetters back also for ringing calls
+      callNotificationTextGetters: {
+        getTitle(type, createdUserName) {
+          if (type === "call.live_started") {
+            return `Call went live, it was started by ${createdUserName}`;
+          } else {
+            return `${createdUserName} is notifying you about a call`;
+          }
+        },
+        getBody(_type, createdUserName) {
+          return "Tap to open the call";
+        },
       },
     },
     // add the callback to be executed a call is accepted, used for navigation
-    navigateAcceptCall: () => {
-      console.log("[navigateAcceptCall] Call Accepted");
-      staticNavigateToCall();
-      console.log("[navigateAcceptCall] Navigated to Call");
-    },
+    // this (navigateAcceptCall) is deprecated
+    // navigateAcceptCall: () => {
+    //   console.log("[navigateAcceptCall] Call Accepted");
+    //   staticNavigateToCall();
+    //   console.log("[navigateAcceptCall] Navigated to Call");
+    // },
     // add the callback to be executed when a notification is tapped,
     // but the user did not press accept or decline, used for navigation
-    navigateToIncomingCall: () => {
-      console.log("[navigateToIncomingCall] Navigated to Incoming Call");
-      staticNavigateToRingingCall();
-    },
+    // also deprecated
+    // navigateToIncomingCall: () => {
+    //   console.log("[navigateToIncomingCall] Navigated to Incoming Call");
+    //   staticNavigateToRingingCall();
+    // },
+    // optional: add the callback to be executed when a non ringing call notification is tapped
+    // onTapNonRingingCallNotification: (call_cid: string, type: NonRingingPushEvent) => {
+    //   const [callType, callId] = call_cid.split(':');
+    //   if (callType === 'livestream') {
+    //     staticNavigateToLivestreamCall();
+    //   } else {
+    //     staticNavigateToActiveCall();
+    //   }
+    // },
     // add the async callback to create a video client
     // for incoming calls in the background on a push notification
     createStreamVideoClient: async () => {
@@ -75,8 +91,8 @@ export function setPushConfig() {
         tokenProvider: getStreamUserToken,
       });
     },
-    onTapNonRingingCallNotification: () => {
-      console.log("[onTapNonRingingCallNotification]");
-    },
+    // onTapNonRingingCallNotification: () => {
+    //   console.log("[onTapNonRingingCallNotification]");
+    // },
   });
 }

@@ -1,5 +1,5 @@
 // app/index.tsx
-import { colorPallet } from "@stream-io/video-react-native-sdk";
+import { colorPalette } from "@stream-io/video-react-native-sdk";
 import { Screen } from "components/Screen";
 import { SignIn } from "components/SignIn";
 import { useRouter } from "expo-router";
@@ -30,7 +30,7 @@ export default function Index() {
     <Screen>
       <Text
         style={{
-          color: colorPallet.dark.primary,
+          color: colorPalette.colors.primary,
           fontSize: 48,
           fontWeight: "bold",
           fontStyle: "italic",
@@ -40,7 +40,7 @@ export default function Index() {
       </Text>
       <Text
         style={{
-          color: colorPallet.dark.secondary,
+          color: colorPalette.colors.secondary,
           fontSize: 24,
           marginBottom: 28,
         }}

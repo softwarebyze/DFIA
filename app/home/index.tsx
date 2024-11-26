@@ -1,4 +1,4 @@
-import { colorPallet, StreamVideoRN } from "@stream-io/video-react-native-sdk";
+import { colorPalette, StreamVideoRN } from "@stream-io/video-react-native-sdk";
 import { analytics } from "analytics";
 import { CallButton } from "components/CallButton";
 import { Calls } from "components/Calls";
@@ -112,7 +112,7 @@ export default function Home() {
         <Button
           title="Delete account"
           onPress={() => deleteAccount(user!)} // Non-null assertion since user is non-null here
-          color={colorPallet.dark.error}
+          color={colorPalette.colors.buttonWarning}
         />
       </View>
     </Screen>
