@@ -1,4 +1,7 @@
-import notifee, { AndroidImportance } from "@notifee/react-native";
+import notifee, {
+  AndroidCategory,
+  AndroidImportance,
+} from "@notifee/react-native";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
@@ -91,11 +94,11 @@ function useNotificationObserver() {
 
     // handle the message
     // const message = await client.getMessage(callCid);
-
     // create the android channel to send the notification to
     const channelId = await notifee.createChannel({
-      id: "default-channel-id",
+      id: "stream_call_notifications",
       name: "Calls",
+      sound: "ringtone",
     });
 
     // display the notification
@@ -105,16 +108,23 @@ function useNotificationObserver() {
       ...((stream as unknown as Record<string, string> | undefined) ?? {}), // extract and merge stream object if present
     };
     await notifee.displayNotification({
+      id: "stream_call_notifications",
       // title: 'New call from ' + message.message.user?.name,
       title: "New call",
       // body: message.message.text,
       data,
+      ios: {
+          sound:"ringtone.wav"
+      },
       android: {
-        channelId,
+        channelId: "stream_call_notifications",
         importance: AndroidImportance.HIGH,
         fullScreenAction: {
           id: "default",
         },
+        category: AndroidCategory.CALL,
+        loopSound: true,
+        sound: "ringtone",
         // add a press action to open the app on press
         pressAction: {
           id: "default",

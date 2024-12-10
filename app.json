@@ -74,6 +74,14 @@
         ],
         "@config-plugins/react-native-callkeep",
         "@react-native-firebase/app",
+        [
+            "expo-build-properties",
+            {
+                "ios": {
+                    "useFrameworks": "static"
+                }
+            }
+        ],
         "@react-native-firebase/messaging",
         [
             "@config-plugins/react-native-webrtc",
@@ -82,7 +90,16 @@
                 "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
             }
         ],
-        "expo-router"
+        "expo-router",
+        [
+            "expo-notifications",
+            {
+                "sounds": [
+                    "./assets/ringtone.wav"
+                ],
+                "enableBackgroundRemoteNotifications": true
+            }
+        ]
     ],
     "owner": "zackebenfeld"
 }

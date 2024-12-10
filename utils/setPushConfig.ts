@@ -26,28 +26,33 @@ export function setPushConfig() {
       // configure the notification channel to be used for incoming calls for Android.
       // ** i changed incomingCallChannel to callChannel but i think this is only for non-ringing calls
       // and i think we need to add incomingCallChannel back also
-      callChannel: {
+      incomingCallChannel: {
         id: "stream_call_notifications",
         name: "Call notifications",
         // This importance will ensure that the notification will appear on-top-of applications.
         importance: AndroidImportance.HIGH,
-        sound: "default",
+        sound: "ringtone"
       },
       // configure the functions to create the texts shown in the notification
       // for non ringing calls in Android.
       // ** same here, i changed incomingCallNotificationTextGetters to callNotificationTextGetters
       // but i think we need to add incomingCallNotificationTextGetters back also for ringing calls
-      callNotificationTextGetters: {
-        getTitle(type, createdUserName) {
-          if (type === "call.live_started") {
-            return `Call went live, it was started by ${createdUserName}`;
-          } else {
-            return `${createdUserName} is notifying you about a call`;
-          }
-        },
-        getBody(_type, createdUserName) {
-          return "Tap to open the call";
-        },
+      // callNotificationTextGetters: {
+      //   getTitle(type, createdUserName) {
+      //     if (type === "call.live_started") {
+      //       return `Call went live, it was started by ${createdUserName}`;
+      //     } else {
+      //       return `${createdUserName} is notifying you about a call`;
+      //     }
+      //   },
+      //   getBody(_type, createdUserName) {
+      //     return "Tap to open the call";
+      //   },
+      // },
+      incomingCallNotificationTextGetters: {
+        getTitle: (createdUserName: string) =>
+          `Incoming call from ${createdUserName}`,
+        getBody: (_createdUserName: string) => "Tap to answer the call",
       },
     },
     // add the callback to be executed a call is accepted, used for navigation
