@@ -1,6 +1,5 @@
 import messaging from "@react-native-firebase/messaging";
 import { useStreamVideoClient } from "@stream-io/video-react-native-sdk";
-import { AuthContext } from "app/_layout";
 import {
   PropsWithChildren,
   useContext,
@@ -13,6 +12,8 @@ import { Platform } from "react-native";
 // import { useAuth } from './AuthProvider';
 import notifee, { AuthorizationStatus } from "@notifee/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
+import { AuthContext } from "context/AuthContext";
 // import notifee from "@notifee/react-native";
 // import * as Notifications from "expo-notifications";
 
@@ -190,14 +191,14 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
           push_provider,
           push_provider_name,
           user?.uid,
-          true
+          true,
         );
 
         await client.addVoipDevice(
           token,
           push_provider,
           push_provider_name,
-          user?.uid
+          user?.uid,
         );
 
         // client.setLocalDevice({
@@ -215,7 +216,7 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
       };
 
       unsubscribeTokenRefreshListenerRef.current = messaging().onTokenRefresh(
-        async (newToken) => {
+        async newToken => {
           console.log("onTokenRefresh");
           await Promise.all([
             removeOldToken(),
@@ -224,11 +225,11 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
               push_provider,
               push_provider_name,
               user?.uid,
-              true
+              true,
             ),
             AsyncStorage.setItem("@current_push_token", newToken),
           ]);
-        }
+        },
       );
     };
 

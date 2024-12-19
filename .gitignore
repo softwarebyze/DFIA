@@ -31,7 +31,8 @@ yarn-error.*
 # macOS
 .DS_Store
 *.pem
-
+.yarn
+yarn.lock
 # local env files
 .env*.local
 

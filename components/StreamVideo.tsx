@@ -27,6 +27,7 @@ export const StreamVideo = ({
       tokenProvider: getStreamUserToken,
     });
 
+    console.log("myClient");
     setClient(myClient);
 
     return () => {

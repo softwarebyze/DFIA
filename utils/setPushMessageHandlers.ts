@@ -1,57 +1,51 @@
-import notifee from "@notifee/react-native";
-import messaging from "@react-native-firebase/messaging";
+const BACKGROUND_NOTIFICATION_TASK =
+  "STREAM-VIDEO-BACKGROUND-NOTIFICATION-TASK";
+
 import {
   isFirebaseStreamVideoMessage,
   firebaseDataHandler,
-  onAndroidNotifeeEvent,
-  isNotifeeStreamVideoEvent,
+  isExpoNotificationStreamVideoEvent,
 } from "@stream-io/video-react-native-sdk";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
+import * as TaskManager from "expo-task-manager";
 
-export const setPushMessageListeners = () => {
-  // Set up the background message handler for Android
-  messaging().setBackgroundMessageHandler(async (msg) => {
-    console.log("messaging().setBackgroundMessageHandler", msg);
-    if (isFirebaseStreamVideoMessage(msg)) {
-      await firebaseDataHandler(msg.data);
-    } else {
-      // your other messages (if any)
+export const setPushMessageHandlers = () => {
+  TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
+    console.log("BACKGROUND_NOTIFICATION_TASK", data);
+    if (error) {
+      return;
+    }
+    // @ts-ignore
+    const dataToProcess = data.notification?.data;
+    if (data?.sender === "stream.video") {
+      firebaseDataHandler(dataToProcess);
     }
   });
-  // on press handlers of background notifications
-  notifee.onBackgroundEvent(async (event) => {
-    if (isNotifeeStreamVideoEvent(event)) {
-      await onAndroidNotifeeEvent({ event, isBackground: true });
-    } else {
-      // your other background notifications (if any)
-    }
+  // background handler (does not handle on app killed state)
+  Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+  Notifications.setNotificationHandler({
+    handleNotification: async notification => {
+      if (
+        Platform.OS === "android" &&
+        isExpoNotificationStreamVideoEvent(notification)
+      ) {
+        const data = notification?.request?.trigger?.remoteMessage?.data!;
+        await firebaseDataHandler(data);
+        // do not show this message, it processed by the above handler
+        return {
+          shouldShowAlert: false,
+          shouldPlaySound: false,
+          shouldSetBadge: false,
+        };
+      } else {
+        // configuration for iOS call notification && your other messages, example below to show alert and play sound
+        return {
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        };
+      }
+    },
   });
-  // Set up the foreground message handler for Android
-  messaging().onMessage((msg) => {
-    console.log("messaging().onMessage", msg);
-    if (isFirebaseStreamVideoMessage(msg)) {
-      firebaseDataHandler(msg.data);
-    } else {
-      // your other messages (if any)
-    }
-  });
-  notifee.onForegroundEvent((event) => {
-    if (isNotifeeStreamVideoEvent(event)) {
-      onAndroidNotifeeEvent({ event, isBackground: false });
-    } else {
-      // your other foreground notifications (if any)
-    }
-  });
-  if (Platform.OS === "ios") {
-    // show notification on foreground on iOS
-    Notifications.setNotificationHandler({
-      // example configuration below to show alert and play sound
-      handleNotification: async (notification) => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-      }),
-    });
-  }
 };
