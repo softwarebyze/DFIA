@@ -23,14 +23,12 @@ const Call = () => {
   useEffect(() => {
     const createCall = async () => {
       if (!client) {
-        console.error("No client");
-        endCall();
+        console.error("Log :: No client");
         return;
       }
 
       if (!client.streamClient.userID) {
-        console.error("No user id at call creation");
-        endCall();
+        console.error("Log :: No user id at call creation");
         return;
       }
 
@@ -51,7 +49,9 @@ const Call = () => {
     createCall();
   }, []);
   const endCall = async () => {
-    await call?.endCall();
+    try {
+      await call?.endCall();
+    } catch (error) {}
     if (router.canGoBack()) {
       router.back();
     } else {
@@ -79,7 +79,7 @@ const CreateCall = () => {
   return newCallId ? (
     <StreamCall callId={newCallId}>
       <SafeAreaView style={{ flex: 1 }}>
-        <CallInfo />
+        {/* <CallInfo /> */}
         <Call />
       </SafeAreaView>
     </StreamCall>

@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   appName: {
     color: AppColors.white,
-    fontSize: 48,
+    fontSize: 50,
     fontWeight: "bold",
     fontStyle: "italic",
     marginBottom: 20,
@@ -172,9 +172,11 @@ const styles = StyleSheet.create({
   formContainer: {
     width: "100%",
     maxWidth: 400,
-    backgroundColor: AppColors.white,
-    borderRadius: 10,
+    backgroundColor: AppColors.formBG,
+    borderRadius: 12,
     padding: 20,
+    paddingTop: 30,
+    paddingBottom: 30,
     shadowColor: AppColors.black,
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -189,14 +191,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "500",
-    marginBottom: 5,
+    marginBottom: 10,
   },
   input: {
     borderWidth: 1,
     borderColor: AppColors.border,
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 12,
     fontSize: 16,
     backgroundColor: AppColors.white,
@@ -212,9 +214,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: AppColors.blue,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 10,
   },
   buttonText: {
     color: AppColors.white,
@@ -227,7 +230,7 @@ const styles = StyleSheet.create({
   haveAccount: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   text: {
     fontSize: 16,

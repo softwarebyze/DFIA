@@ -1,6 +1,7 @@
 import React from "react";
 import { useCall, useCallStateHooks } from "@stream-io/video-react-native-sdk";
 import { Text, View, StyleSheet } from "react-native";
+import AppColors from "constants/app.colors";
 
 export const CallInfo = () => {
   const call = useCall();
@@ -14,22 +15,22 @@ export const CallInfo = () => {
   return (
     <View style={styles.container} accessible accessibilityLabel="Call Info">
       <Text style={styles.title}>Call Info</Text>
-      <Text style={styles.info}>
-        <Text style={styles.label}>Call ID: </Text>
-        {call?.cid || "N/A"}
-      </Text>
-      <Text style={styles.info}>
-        <Text style={styles.label}>State: </Text>
-        {callingState || "Unknown"}
-      </Text>
-      <Text style={styles.info}>
-        <Text style={styles.label}>Participants: </Text>
-        {participants.length}
-      </Text>
-      <Text style={styles.info}>
-        <Text style={styles.label}>Members: </Text>
-        {members.length}
-      </Text>
+      <View style={styles.row}>
+        <Text style={styles.nameTitle}>Call ID: </Text>
+        <Text style={styles.subtitle}>{call?.cid || "N/A"}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.nameTitle}>State: </Text>
+        <Text style={styles.subtitle}>{callingState || "Unknown"}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.nameTitle}>Participants: </Text>
+        <Text style={styles.subtitle}>{participants.length}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.nameTitle}>Members: </Text>
+        <Text style={styles.subtitle}>{members.length}</Text>
+      </View>
       {members.length > 0 && (
         <View style={styles.membersList}>
           {members.map(member => (
@@ -51,24 +52,52 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: AppColors.black,
     marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: AppColors.black,
+    flex: 1,
+    textAlign: "right",
+    paddingRight: 6,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 1,
+    borderBottomColor: AppColors.disable,
+    borderBottomWidth: 1,
+    padding: 5,
+  },
+  nameTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    flex: 1,
+    paddingLeft: 6,
   },
   info: {
     fontSize: 14,
     marginVertical: 2,
   },
-  label: {
-    fontWeight: "bold",
-  },
   membersList: {
     marginTop: 10,
+    width: "100%",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginVertical: 1,
+    borderBottomColor: AppColors.disable,
+    borderBottomWidth: 1,
+    padding: 5,
   },
   memberName: {
-    fontSize: 14,
     marginVertical: 1,
-    paddingLeft: 10,
-    color: "#555",
+    fontSize: 18,
+    color: AppColors.black,
+    // textAlign: "right",
+    paddingRight: 6,
   },
 });

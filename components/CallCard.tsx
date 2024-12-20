@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import {
   CallingState,
@@ -36,24 +37,30 @@ export const CallCard = () => {
 
   if (!call) return null;
 
-  console.log(call.id);
   useEffect(() => {
     //End Call if paticipant count 1 & created by my
     if (participantCount === 1 && createdBy?.id === user?.uid) {
-      call.endCall();
+      call?.endCall();
     }
-
     return () => {};
   }, [call]);
 
-  const onPress = () => {
+  const onPress = async () => {
+    try {
+      await call?.get();
+    } catch (error) {
+      try {
+        await call?.join();
+      } catch (error2) {}
+      // Alert.alert("DFIA", "Something went wrong");
+    }
     if (call) {
       router.navigate(`/home/join-call/${call.id}`);
     }
   };
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <View style={styles.card}>
       <View>
         <Image source={AppPNGs.IcVideoCall} style={styles.callIcon} />
       </View>
@@ -72,25 +79,29 @@ export const CallCard = () => {
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     padding: 12,
-    borderWidth: 1,
-    borderColor: AppColors.border,
+    // borderWidth: 1,
+    // borderColor: AppColors.border,
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
     marginBottom: 8,
     backgroundColor: AppColors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: AppColors.border,
   },
   callIcon: {
     width: 30,
     height: 30,
+    marginRight: 12,
+    marginLeft: 6,
   },
   details: {
     flex: 1,

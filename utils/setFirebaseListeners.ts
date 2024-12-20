@@ -28,10 +28,9 @@ export const setFirebaseListeners = () => {
 
     const callId = event.detail.notification?.id?.split(":")[1];
     if (isNotifeeStreamVideoEvent(event)) {
-      // onAndroidNotifeeEvent({ event, isBackground: false });
       await onAndroidNotifeeEvent({ event, isBackground: true });
       if (event.detail.pressAction?.id == "accept") {
-        router.navigate(`/home/join-call/${callId}`);
+        // router.navigate(`/home/join-call/${callId}`);
       }
     } else {
       // your other foreground notifications (if any)
@@ -52,7 +51,7 @@ export const setFirebaseListeners = () => {
     if (isNotifeeStreamVideoEvent(event)) {
       onAndroidNotifeeEvent({ event, isBackground: false });
       if (event.detail.pressAction?.id == "accept") {
-        router.navigate(`/home/join-call/${callId}`);
+        // router.navigate(`/home/join-call/${callId}`);
       }
     } else {
       // your other foreground notifications (if any)

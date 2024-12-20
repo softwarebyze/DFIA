@@ -8,17 +8,19 @@ import {
   useCallStateHooks,
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
+import { IncomingCallInfo } from "components/IncomingCallInfo";
 import { StreamCall } from "components/StreamCall";
+import AppColors from "constants/app.colors";
 import { AuthContext } from "context/AuthContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useContext } from "react";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Alert, Text, View } from "react-native";
 
 const CallPreview = () => {
   const { user } = useContext(AuthContext);
   const call = useCall();
-  // const callState = call?.state.callingState;
+
   const {
     useCallCallingState,
     useParticipants,
@@ -33,14 +35,18 @@ const CallPreview = () => {
   const members = useCallMembers();
 
   const joinCall = async () => {
-    call?.join();
+    try {
+      await call?.join();
+    } catch (error) {
+      Alert.alert("DFIA", "Something went wrong");
+    }
   };
 
   const leaveOrEndCall = async () => {
     if (callingState === CallingState.JOINED && createdBy?.id === user?.uid) {
-      await call?.endCall();
+      await call?.endCall().catch(() => console.log("Failed to end call."));
     } else {
-      await call?.leave();
+      await call?.leave().catch(() => console.log("Failed to leave call."));
     }
     if (router.canGoBack()) {
       router.back();
@@ -53,9 +59,17 @@ const CallPreview = () => {
     if (callingState === CallingState.LEFT) {
       router.back();
     }
+    getCallDetails();
   }, [callingState]);
-  console.log("callingState :: ", callingState);
-  console.log("call state :: ", call?.state.callingState);
+
+  const getCallDetails = async () => {
+    try {
+      await call?.get();
+    } catch (error) {
+      Alert.alert("DFIA", "Something went wrong");
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {callingState === CallingState.IDLE && (
@@ -63,10 +77,24 @@ const CallPreview = () => {
           JoinCallButton={() => <JoinCallButton onPressHandler={joinCall} />}
         />
       )}
-
       {callingState === CallingState.RINGING && <RingingCallContent />}
+      {callingState === CallingState.JOINING && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
       {callingState === CallingState.JOINED && (
         <CallContent onHangupCallHandler={leaveOrEndCall} />
+      )}
+      {callingState === CallingState.RECONNECTING && (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.nameTitle}>Reconnecting...</Text>
+        </View>
+      )}
+      {callingState === CallingState.OFFLINE && (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.nameTitle}>OFFLINE...</Text>
+        </View>
       )}
     </View>
   );
@@ -83,3 +111,17 @@ const JoinCall = () => {
 };
 
 export default JoinCall;
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: AppColors.callBG,
+  },
+  nameTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: AppColors.white,
+  },
+});

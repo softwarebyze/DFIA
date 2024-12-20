@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   },
   signInBtnText: {
     color: AppColors.white,
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "500",
   },
 });

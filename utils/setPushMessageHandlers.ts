@@ -12,7 +12,6 @@ import * as TaskManager from "expo-task-manager";
 
 export const setPushMessageHandlers = () => {
   TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
-    console.log("BACKGROUND_NOTIFICATION_TASK", data);
     if (error) {
       return;
     }

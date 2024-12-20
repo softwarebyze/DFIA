@@ -74,6 +74,7 @@ export default function Home() {
             />
           </TouchableOpacity>
         </View>
+        <View style={styles.underlineView}></View>
         <IncomingCallComponent />
         <PastCalls />
         <CallButton onPress={() => router.push(`/home/create-call`)} />
@@ -96,6 +97,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  underlineView: {
+    height: 1,
+    backgroundColor: AppColors.border,
+    width: "100%",
+    marginTop: 12,
+    marginBottom: 12,
   },
   userName: {
     fontSize: 22,

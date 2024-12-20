@@ -59,8 +59,6 @@ export default function AuthenticatedLayout() {
     );
   }
 
-  console.log("[AuthenticatedLayout] Authenticated user:", user.uid);
-
   return (
     <StreamVideo user={user}>
       <NotificationsProvider>

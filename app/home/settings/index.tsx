@@ -194,12 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: AppColors.black,
   },
-  // subtitle: {
-  //   fontSize: 18,
-  //   color: AppColors.black,
-  //   marginBottom: 10,
-  // },
-
   email: {
     fontSize: 16,
     color: AppColors.black,
@@ -210,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.blue,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 15,
     alignItems: "center",
   },
