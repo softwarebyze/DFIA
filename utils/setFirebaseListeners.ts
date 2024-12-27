@@ -39,6 +39,7 @@ export const setFirebaseListeners = () => {
 
   // Optionally: set up the foreground message handler
   messaging().onMessage(msg => {
+    console.log("messaging().onMessage");
     if (isFirebaseStreamVideoMessage(msg)) {
       firebaseDataHandler(msg.data);
     } else {
@@ -47,6 +48,7 @@ export const setFirebaseListeners = () => {
   });
   //  Optionally: on press handlers of foreground notifications
   notifee.onForegroundEvent(event => {
+    console.log("notifee.onForegroundEvent");
     const callId = event.detail.notification?.id?.split(":")[1];
     if (isNotifeeStreamVideoEvent(event)) {
       onAndroidNotifeeEvent({ event, isBackground: false });

@@ -2,8 +2,10 @@
 import React from "react";
 import {
   CallingState,
+  IncomingCall,
   RingingCallContent,
   StreamCall,
+  useCall,
   useCalls,
   useCallStateHooks,
   useConnectedUser,
@@ -13,9 +15,6 @@ import { Image, StyleSheet, Text, View, Modal } from "react-native";
 import { CallCard } from "./CallCard";
 import AppColors from "constants/app.colors";
 import { IncomingCallInfo } from "./IncomingCallInfo";
-import { IncomingCallButtonGroup } from "./IncomingCallButtonGroup";
-import { MediaStreamButtonGroup } from "./MediaStreamButtonGroup";
-import { Link, router } from "expo-router";
 
 export const IncomingCallComponent = () => {
   const calls = useCalls();
@@ -25,7 +24,6 @@ export const IncomingCallComponent = () => {
       call.isCreatedByMe === false &&
       call.state.callingState === CallingState.RINGING,
   );
-  console.log("incomingCalls ", incomingCalls.length);
   const hasIncomingCall = incomingCalls.length > 0;
 
   if (!hasIncomingCall) {

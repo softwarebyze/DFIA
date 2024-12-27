@@ -9,7 +9,6 @@ import {
   Button,
   Alert,
   AlertButton,
-  TouchableOpacity,
   StyleSheet,
   Image,
   SafeAreaView,
@@ -21,7 +20,7 @@ import {
   signOut,
   User,
 } from "firebase/auth";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { StreamVideoRN } from "@stream-io/video-react-native-sdk";
 import { AuthContext } from "context/AuthContext";
 import { auth } from "firebase";
@@ -29,6 +28,7 @@ import { analytics } from "analytics";
 import { FirebaseError } from "firebase/app";
 import AppColors from "constants/app.colors";
 import { AppPNGs } from "constants/app.image";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const deleteAccount = async (user: User) => {
   analytics.track("deleteAccount", { user });
@@ -100,17 +100,22 @@ export default function Settings() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
-            <Image source={AppPNGs.IcBack} style={styles.backArrow} />
-          </TouchableOpacity>
+          <Link
+            href=".."
+            onPress={event => {
+              event.preventDefault();
+              onBack();
+            }}
+            style={styles.backButton}>
+            <Ionicons
+              name={AppPNGs.IcBack}
+              style={styles.backArrow}
+              size={30}
+              color="black"
+            />
+          </Link>
           <Text style={styles.headerText}>Settings</Text>
         </View>
-        {/* <Text style={styles.title}>{"Name"}</Text>
-        <Text style={styles.subtitle}>{user?.displayName || ""}</Text>
-        <Text style={styles.title}>{"Email"}</Text>
-        <Text style={styles.subtitle}>
-          {user?.email || "No email available"}
-        </Text> */}
         <View style={styles.row}>
           <Text style={styles.nameTitle}>Name</Text>
           <Text style={styles.subtitle}>
@@ -123,14 +128,28 @@ export default function Settings() {
             {user?.email || "No email available"}
           </Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={onLogout}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.deleteButton]}
-          onPress={onDeleteAccount}>
-          <Text style={styles.buttonText}>Delete Account</Text>
-        </TouchableOpacity>
+        <View style={styles.button}>
+          <Link
+            href=".."
+            onPress={async event => {
+              event.preventDefault();
+              await onLogout();
+            }}
+            style={styles.linkButton}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </Link>
+        </View>
+        <View style={[styles.button, styles.deleteButton]}>
+          <Link
+            href=".."
+            onPress={event => {
+              event.preventDefault();
+              onDeleteAccount();
+            }}
+            style={[styles.linkButton]}>
+            <Text style={styles.buttonText}>Delete Account</Text>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -145,6 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: AppColors.white,
     padding: 20,
+    alignItems: "center",
   },
   header: {
     flexDirection: "row",
@@ -153,17 +173,18 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 15,
-    justifyContent: "flex-start",
+    padding: 5,
+    paddingLeft: 0,
   },
   backArrow: {
     width: 24,
     height: 24,
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     color: AppColors.black,
-    flex: 1, // Takes up remaining space
+    flex: 1,
   },
   row: {
     flexDirection: "row",
@@ -202,19 +223,26 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 50,
     backgroundColor: AppColors.blue,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
     borderRadius: 12,
-    marginBottom: 15,
     alignItems: "center",
+    height: 50,
+    width: "80%",
+    justifyContent: "center",
+  },
+  linkButton: {
+    paddingVertical: 12,
+    width: "100%",
+    textAlign: "center",
+    // backgroundColor: AppColors.grey,
   },
   deleteButton: {
-    marginTop: 12,
+    marginTop: 21,
     backgroundColor: AppColors.red,
   },
   buttonText: {
     color: AppColors.white,
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
 });

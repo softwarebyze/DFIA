@@ -1,5 +1,5 @@
 import AppColors from "constants/app.colors";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { auth } from "firebase";
 import {
   createUserWithEmailAndPassword,
@@ -14,7 +14,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { analytics } from "analytics";
@@ -61,7 +60,6 @@ export default function SignUp() {
       );
       analytics.track("updateProfile", { username });
       await updateProfile(userCredential.user, { displayName: username });
-      console.log("User signed in successfully!", userCredential);
       router.replace("/home");
       // Handle successful login (e.g., navigation or alert)
     } catch (error: any) {
@@ -130,23 +128,35 @@ export default function SignUp() {
         {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
         {/* Submit Button */}
-        <TouchableOpacity
+        <View
           style={[
-            styles.button,
-            loading ? styles.buttonDisabled : null, // Disabled state styling
-          ]}
-          onPress={signUp}
-          disabled={loading}>
-          <Text style={styles.buttonText}>
-            {loading ? "Signing Up..." : "Sign Up"}
-          </Text>
-        </TouchableOpacity>
-
+            styles.linkButtonContainer,
+            loading ? styles.buttonDisabled : null,
+          ]}>
+          <Link
+            href="#"
+            onPress={event => {
+              event.preventDefault();
+              signUp();
+            }}
+            disabled={loading}
+            style={styles.button}>
+            <Text style={styles.buttonText}>
+              {loading ? "Signing Up..." : "Sign Up"}
+            </Text>
+          </Link>
+        </View>
         <View style={styles.haveAccount}>
           <Text style={styles.text}>have an account? </Text>
-          <TouchableOpacity onPress={onSignIn}>
+          <Link
+            href="#"
+            onPress={event => {
+              event.preventDefault();
+              onSignIn();
+            }}
+            style={styles.linkText}>
             <Text style={styles.linkText}>Sign In</Text>
-          </TouchableOpacity>
+          </Link>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -211,20 +221,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
   },
-  button: {
-    backgroundColor: AppColors.blue,
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
+  linkButtonContainer: {
     justifyContent: "center",
-    marginTop: 10,
+    alignItems: "center",
+    alignContent: "center",
+    // paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: AppColors.blue,
+  },
+  button: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: "100%",
+    textAlign: "center",
   },
   buttonText: {
     color: AppColors.white,
     fontSize: 18,
     fontWeight: "600",
+    flex: 1,
+    marginTop: 10,
+    textAlign: "center",
   },
   buttonDisabled: {
+    paddingHorizontal: 90,
     backgroundColor: AppColors.disable, // Lighter green for disabled state
   },
   haveAccount: {

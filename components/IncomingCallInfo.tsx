@@ -21,7 +21,6 @@ export const IncomingCallInfo = () => {
     .map(({ user }) => user)
     .filter(user => user.id !== connectedUser?.id);
 
-  console.log("membersToShow ::", membersToShow.length);
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>

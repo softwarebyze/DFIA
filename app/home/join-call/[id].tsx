@@ -8,7 +8,6 @@ import {
   useCallStateHooks,
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
-import { IncomingCallInfo } from "components/IncomingCallInfo";
 import { StreamCall } from "components/StreamCall";
 import AppColors from "constants/app.colors";
 import { AuthContext } from "context/AuthContext";
@@ -44,9 +43,9 @@ const CallPreview = () => {
 
   const leaveOrEndCall = async () => {
     if (callingState === CallingState.JOINED && createdBy?.id === user?.uid) {
-      await call?.endCall().catch(() => console.log("Failed to end call."));
+      await call?.endCall().catch();
     } else {
-      await call?.leave().catch(() => console.log("Failed to leave call."));
+      await call?.leave().catch();
     }
     if (router.canGoBack()) {
       router.back();

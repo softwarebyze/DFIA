@@ -18,7 +18,6 @@ export const IncomingCallButtonGroup = (props: {
     try {
       props.callAccepted();
     } catch (error) {
-      console.log("Error accepting Call", error);
       props.callFail();
     }
   }, [call]);
@@ -31,7 +30,6 @@ export const IncomingCallButtonGroup = (props: {
       await call?.leave({ reject: true, reason: "decline" });
       props.callFail();
     } catch (error) {
-      console.log("Error rejecting Call", error);
       props.callFail();
     }
   }, [call, callingState]);

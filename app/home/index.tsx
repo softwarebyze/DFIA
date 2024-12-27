@@ -3,7 +3,7 @@ import { analytics } from "analytics";
 import { CallButton } from "components/CallButton";
 import { Calls } from "components/Calls";
 import { Screen } from "components/Screen";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import {
   deleteUser,
@@ -22,7 +22,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { auth } from "../../firebase";
@@ -31,6 +30,8 @@ import { AuthContext } from "context/AuthContext";
 import { PastCalls } from "components/PastCall";
 import { IncomingCalls } from "components/IncomingCall";
 import { IncomingCallComponent } from "components/IncomingCallComponent";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { AppPNGs } from "constants/app.image";
 
 export default function Home() {
   const { user, isLoading } = useContext(AuthContext);
@@ -67,12 +68,14 @@ export default function Home() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.userName}>Hi, {user?.displayName}</Text>
-          <TouchableOpacity onPress={onSetting}>
-            <Image
-              source={require("assets/settings.png")}
+          <Link href="/home/settings" style={styles.iconLink}>
+            <Ionicons
+              name={AppPNGs.IcSetting}
               style={styles.icon}
+              size={30}
+              color="black"
             />
-          </TouchableOpacity>
+          </Link>
         </View>
         <View style={styles.underlineView}></View>
         <IncomingCallComponent />
@@ -97,6 +100,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  iconLink: {
+    padding: 8,
   },
   underlineView: {
     height: 1,

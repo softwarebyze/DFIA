@@ -68,14 +68,11 @@ export function setPushConfig() {
     // add the async callback to create a video client
     // for incoming calls in the background on a push notification
     createStreamVideoClient: async () => {
-      console.log("createStreamVideoClient");
       // note that since the method is async,
       // you can call your server to get the user data or token or retrieve from offline storage.
       const { currentUser } = auth;
-      console.log("currentUser", currentUser);
       const userId = currentUser?.uid;
       const userName = currentUser?.displayName;
-      console.log("userId", userId);
       if (!userId) return undefined;
       const user = { id: userId, name: userName ?? undefined };
       return StreamVideoClient.getOrCreateInstance({

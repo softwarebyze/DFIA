@@ -14,16 +14,37 @@ export const PastCalls = () => {
   // const calls = useCalls();
   const [callList, setCallList] = useState<Call[]>([]);
   const client = useStreamVideoClient();
+
   useEffect(() => {
     getCalls();
     return () => {};
   }, []);
 
   const getCalls = async () => {
+    if (!client) {
+      return;
+    }
+
+    if (!client.streamClient.userID) {
+      console.error("Log :: No user id at call creation");
+      return;
+    }
+
+    // USING BELOW LOGIC WE ARE CREATING A CALL
+    // const members = [
+    //   { user_id: client.streamClient.userID },
+    //   { user_id: "vmljsmXYDBMloSozpWUxZSQdSHj2" },
+    // ];
+
     const calls = await client?.queryCalls({
-      // filter_conditions: { ...filters },
       // sort: [...sortOptions],
-      limit: 25,
+      filter_conditions: {
+        $or: [
+          { created_by_user_id: client.streamClient.userID },
+          { members: { $in: [client.streamClient.userID] } },
+        ],
+      },
+      limit: 30,
       watch: false,
     });
     setCallList(calls?.calls ? calls.calls : []);

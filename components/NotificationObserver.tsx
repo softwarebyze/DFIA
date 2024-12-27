@@ -3,6 +3,10 @@ import notifee from "@notifee/react-native";
 import messaging from "@react-native-firebase/messaging";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
+import {
+  isExpoNotificationStreamVideoEvent,
+  oniOSExpoNotificationEvent,
+} from "@stream-io/video-react-native-sdk";
 
 export const NotificationObserver: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -12,7 +16,11 @@ export const NotificationObserver: React.FC<{ children: React.ReactNode }> = ({
     if (Platform.OS === "ios") {
       const subscription = Notifications.addNotificationReceivedListener(
         notification => {
-          console.log("iOS Notification Received", notification);
+          if (isExpoNotificationStreamVideoEvent(notification)) {
+            oniOSExpoNotificationEvent(notification);
+          } else {
+            // your other notifications (if any)
+          }
         },
       );
 
@@ -25,7 +33,6 @@ export const NotificationObserver: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     // Foreground Message Listener
     const unsubscribe = messaging().onMessage(async message => {
-      console.log("Foreground Notification:", message);
       // Handle foreground notification
     });
 
@@ -35,7 +42,6 @@ export const NotificationObserver: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     // Background Message Handler
     // messaging().setBackgroundMessageHandler(async remoteMessage => {
-    //   console.log("Background Notification:", remoteMessage);
     //   await notifee.displayNotification({
     //     title: "New Notification",
     //     body: remoteMessage.notification?.body ?? "No body",

@@ -1,13 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {
-  Pressable,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { Pressable, Text, View, StyleSheet, Image, Alert } from "react-native";
 import {
   CallingState,
   useCall,
@@ -17,6 +9,7 @@ import { Link, router } from "expo-router";
 import AppColors from "constants/app.colors";
 import { AppPNGs } from "constants/app.image";
 import { AuthContext } from "context/AuthContext";
+import Feather from "@expo/vector-icons/Feather";
 
 export const CallCard = () => {
   const call = useCall();
@@ -62,7 +55,12 @@ export const CallCard = () => {
   return (
     <View style={styles.card}>
       <View>
-        <Image source={AppPNGs.IcVideoCall} style={styles.callIcon} />
+        <Feather
+          name={AppPNGs.IcVideoCall}
+          size={30}
+          color={AppColors.black}
+          style={styles.callIcon}
+        />
       </View>
       <View style={styles.details}>
         <View style={styles.participantNames}>

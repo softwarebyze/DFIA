@@ -11,10 +11,6 @@ const useNotificationHandlers = () => {
   useEffect(() => {
     const unsubscribeOnNotificationOpenedApp =
       messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-          "[useNotificationHandlers] Notification opened from background:",
-          remoteMessage,
-        );
         // TODO: Add navigation logic here
       });
 
@@ -22,13 +18,8 @@ const useNotificationHandlers = () => {
       .getInitialNotification()
       .then(remoteMessage => {
         if (remoteMessage) {
-          console.log(
-            "[useNotificationHandlers] Notification opened from quit state:",
-            remoteMessage,
-          );
           // TODO: Add navigation logic here
         } else {
-          console.log("[useNotificationHandlers] No initial notification.");
         }
       });
 
