@@ -1,15 +1,16 @@
 // app/home/[callId].tsx
 import {
   CallContent,
+  CallingState,
   useCall,
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
 import { CallInfo } from "components/CallInfo";
 import { StreamCall } from "components/StreamCall";
+import { AuthContext } from "context/AuthContext";
 import { useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
-import { AuthContext } from "../_layout";
 
 const angelUserIds = ["vmljsmXYDBMloSozpWUxZSQdSHj2"];
 
@@ -22,12 +23,12 @@ const Call = () => {
   useEffect(() => {
     const createCall = async () => {
       if (!client) {
-        console.error("No client");
+        console.error("Log :: No client");
         return;
       }
 
       if (!client.streamClient.userID) {
-        console.error("No user id at call creation");
+        console.error("Log :: No user id at call creation");
         return;
       }
 
@@ -47,20 +48,17 @@ const Call = () => {
 
     createCall();
   }, []);
-
-  return (
-    <CallContent
-      onHangupCallHandler={() => {
-        console.log("hangup call");
-        // call?.leave();
-        if (router.canGoBack()) {
-          router.back();
-        } else {
-          router.push("/");
-        }
-      }}
-    />
-  );
+  const endCall = async () => {
+    try {
+      await call?.endCall();
+    } catch (error) {}
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+  return <CallContent onHangupCallHandler={endCall} />;
 };
 
 const CreateCall = () => {
@@ -81,7 +79,7 @@ const CreateCall = () => {
   return newCallId ? (
     <StreamCall callId={newCallId}>
       <SafeAreaView style={{ flex: 1 }}>
-        <CallInfo />
+        {/* <CallInfo /> */}
         <Call />
       </SafeAreaView>
     </StreamCall>

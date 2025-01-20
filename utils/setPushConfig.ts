@@ -31,7 +31,7 @@ export function setPushConfig() {
         name: "Call notifications",
         // This importance will ensure that the notification will appear on-top-of applications.
         importance: AndroidImportance.HIGH,
-        sound: "ringtone"
+        sound: "ringtone",
       },
       // configure the functions to create the texts shown in the notification
       // for non ringing calls in Android.
@@ -55,20 +55,7 @@ export function setPushConfig() {
         getBody: (_createdUserName: string) => "Tap to answer the call",
       },
     },
-    // add the callback to be executed a call is accepted, used for navigation
-    // this (navigateAcceptCall) is deprecated
-    // navigateAcceptCall: () => {
-    //   console.log("[navigateAcceptCall] Call Accepted");
-    //   staticNavigateToCall();
-    //   console.log("[navigateAcceptCall] Navigated to Call");
-    // },
-    // add the callback to be executed when a notification is tapped,
-    // but the user did not press accept or decline, used for navigation
-    // also deprecated
-    // navigateToIncomingCall: () => {
-    //   console.log("[navigateToIncomingCall] Navigated to Incoming Call");
-    //   staticNavigateToRingingCall();
-    // },
+
     // optional: add the callback to be executed when a non ringing call notification is tapped
     // onTapNonRingingCallNotification: (call_cid: string, type: NonRingingPushEvent) => {
     //   const [callType, callId] = call_cid.split(':');
@@ -81,13 +68,11 @@ export function setPushConfig() {
     // add the async callback to create a video client
     // for incoming calls in the background on a push notification
     createStreamVideoClient: async () => {
-      console.log("createStreamVideoClient");
       // note that since the method is async,
       // you can call your server to get the user data or token or retrieve from offline storage.
       const { currentUser } = auth;
       const userId = currentUser?.uid;
       const userName = currentUser?.displayName;
-      console.log("userId", userId);
       if (!userId) return undefined;
       const user = { id: userId, name: userName ?? undefined };
       return StreamVideoClient.getOrCreateInstance({
@@ -97,7 +82,6 @@ export function setPushConfig() {
       });
     },
     // onTapNonRingingCallNotification: () => {
-    //   console.log("[onTapNonRingingCallNotification]");
     // },
   });
 }

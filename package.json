@@ -1,11 +1,13 @@
 {
   "name": "dfia",
   "version": "1.0.0",
-  "main": "expo-router/entry",
+  "main": "appEntry.js",
   "scripts": {
     "start": "APP_VARIANT=development expo start",
     "android": "expo run:android",
+    "android-release": "expo run:android --variant release",
     "ios": "expo run:ios",
+    "ios-release": "expo run:ios --variant release",
     "web": "expo start --web",
     "secrets:push": "eas secret:push --scope project --env-file .env.local",
     "ship": "eas build --platform ios --auto-submit",

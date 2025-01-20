@@ -28,7 +28,7 @@ export const SignIn = () => {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     analytics.track("updateProfile", { username });
     await updateProfile(userCredential.user, { displayName: username });
@@ -39,8 +39,7 @@ export const SignIn = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={$container}
-    >
+      style={$container}>
       <View style={$inputs}>
         <Text style={$label}>Email</Text>
         <TextInput
@@ -77,7 +76,7 @@ const $input: StyleProp<TextStyle> = {
   padding: 8,
   borderWidth: 1,
   fontSize: 18,
-  borderRadius: 8,
+  borderRadius: 12,
 };
 const $label: StyleProp<TextStyle> = {
   fontSize: 18,

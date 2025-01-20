@@ -1,105 +1,100 @@
 {
-    "name": "DFIA",
-    "scheme": "dfia",
-    "slug": "DFIA",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff"
+  "name": "DFIA",
+  "scheme": "dfia",
+  "slug": "DFIA",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "userInterfaceStyle": "light",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "experiments": {
+    "typedRoutes": true
+  },
+  "ios": {
+    "supportsTablet": true,
+    "bitcode": false
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#ffffff"
     },
-    "experiments": {
-        "typedRoutes": true
-    },
-    "ios": {
-        "supportsTablet": true,
-        "bitcode": false
-    },
-    "android": {
-        "adaptiveIcon": {
-            "foregroundImage": "./assets/adaptive-icon.png",
-            "backgroundColor": "#ffffff"
+    "permissions": [
+      "android.permission.BLUETOOTH",
+      "android.permission.BLUETOOTH_CONNECT",
+      "android.permission.BLUETOOTH_ADMIN",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.CAMERA",
+      "android.permission.INTERNET",
+      "android.permission.MODIFY_AUDIO_SETTINGS",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.SYSTEM_ALERT_WINDOW",
+      "android.permission.WAKE_LOCK"
+    ]
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "b2f85947-bb55-4ed4-bd8b-04ed81831375"
+    }
+  },
+  "plugins": [
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "extraMavenRepos": [
+            "../../node_modules/@notifee/react-native/android/libs"
+          ],
+          "minSdkVersion": 24
         },
-        "permissions": [
-            "android.permission.BLUETOOTH",
-            "android.permission.BLUETOOTH_CONNECT",
-            "android.permission.BLUETOOTH_ADMIN",
-            "android.permission.POST_NOTIFICATIONS",
-            "android.permission.FOREGROUND_SERVICE",
-            "android.permission.ACCESS_NETWORK_STATE",
-            "android.permission.CAMERA",
-            "android.permission.INTERNET",
-            "android.permission.MODIFY_AUDIO_SETTINGS",
-            "android.permission.RECORD_AUDIO",
-            "android.permission.SYSTEM_ALERT_WINDOW",
-            "android.permission.WAKE_LOCK"
-        ]
-    },
-    "web": {
-        "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-        "eas": {
-            "projectId": "b2f85947-bb55-4ed4-bd8b-04ed81831375"
-        }
-    },
-    "plugins": [
-        [
-            "expo-build-properties",
-            {
-                "android": {
-                    "extraMavenRepos": [
-                        "../../node_modules/@notifee/react-native/android/libs"
-                    ],
-                    "minSdkVersion": 24
-                },
-                "ios": {
-                    "useFrameworks": "static"
-                }
-            }
-        ],
-        [
-            "@stream-io/video-react-native-sdk",
-            {
-                "enableNonRingingPushNotifications": true,
-                "androidKeepCallAlive": true,
-                "ringingPushNotifications": {
-                    "disableVideoIos": false,
-                    "includesCallsInRecentsIos": false,
-                    "showWhenLockedAndroid": true
-                }
-            }
-        ],
-        "@config-plugins/react-native-callkeep",
-        "@react-native-firebase/app",
-        [
-            "expo-build-properties",
-            {
-                "ios": {
-                    "useFrameworks": "static"
-                }
-            }
-        ],
-        "@react-native-firebase/messaging",
-        [
-            "@config-plugins/react-native-webrtc",
-            {
-                "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-                "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
-            }
-        ],
-        "expo-router",
-        [
-            "expo-notifications",
-            {
-                "sounds": [
-                    "./assets/ringtone.wav"
-                ],
-                "enableBackgroundRemoteNotifications": true
-            }
-        ]
+        "ios": {}
+      }
     ],
-    "owner": "zackebenfeld"
+    [
+      "@stream-io/video-react-native-sdk",
+      {
+        "ringingPushNotifications": {
+          "disableVideoIos": false,
+          "includesCallsInRecentsIos": false,
+          "showWhenLockedAndroid": true
+        },
+        "androidKeepCallAlive": true,
+        "enableNonRingingPushNotifications": true
+      }
+    ],
+    "@config-plugins/react-native-callkeep",
+    [
+      "@config-plugins/react-native-webrtc",
+      {
+        "cameraPermission": "$(PRODUCT_NAME) requires camera access in order to capture and transmit video",
+        "microphonePermission": "$(PRODUCT_NAME) requires microphone access in order to capture and transmit audio"
+      }
+    ],
+    "@react-native-firebase/app",
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }
+    ],
+    "expo-router",
+    [
+      "expo-notifications",
+      {
+        "sounds": ["./assets/ringtone.wav"],
+        "enableBackgroundRemoteNotifications": true
+      }
+    ]
+  ],
+  "owner": "zackebenfeld"
 }

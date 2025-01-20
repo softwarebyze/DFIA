@@ -13,13 +13,13 @@ export const Calls = () => {
   const calls = useCalls();
   // handle incoming ring calls
   const [firstIncomingCall] = calls.filter(
-    (call) =>
+    call =>
       call.isCreatedByMe === false &&
-      call.state.callingState === CallingState.RINGING
+      call.state.callingState === CallingState.RINGING,
   );
 
   const joinedCalls = calls.filter(
-    (call) => call.state.callingState === CallingState.JOINED
+    call => call.state.callingState === CallingState.JOINED,
   );
 
   const navigateToCall = (callId: string) => {
@@ -37,7 +37,6 @@ export const Calls = () => {
   useEffect(() => {
     const joinedCall = joinedCalls[0];
     if (joinedCall && params.join) {
-      console.log("[Calls] joinedCalls: ", joinedCalls.length);
       navigateToCall(joinedCall.id);
     }
   }, [joinedCalls, params.join]);
@@ -55,7 +54,7 @@ export const Calls = () => {
       <Text style={{ fontSize: 18 }}>
         {calls.length ? "All Calls" : "No calls"}
       </Text>
-      {calls.map((call) => (
+      {calls.map(call => (
         <StreamCall key={call.id} call={call}>
           <CallCard />
         </StreamCall>
@@ -91,14 +90,13 @@ export const CallCard = () => {
           borderRadius: 8,
           flexDirection: "row",
           gap: 8,
-        }}
-      >
+        }}>
         <Text style={{ fontSize: 18 }}>📞</Text>
         <View>
           <Text>{callingState}</Text>
           <Text>{participantCount} Participants</Text>
           <Text>{members.length} Members</Text>
-          {participants.map((participant) => (
+          {participants.map(participant => (
             <Text key={participant.userId}>
               {participant.name || participant.userId}
             </Text>
