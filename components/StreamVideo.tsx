@@ -21,9 +21,9 @@ export const StreamVideo = ({
   const [client, setClient] = useState<StreamVideoClient>();
 
   useEffect(() => {
-    const myClient = new StreamVideoClient({
+    const myClient = StreamVideoClient.getOrCreateInstance({
       apiKey,
-      user: { id: user.uid },
+      user: { id: user.uid, name: user?.displayName ?? undefined },
       tokenProvider: getStreamUserToken,
     });
 
@@ -33,7 +33,7 @@ export const StreamVideo = ({
       myClient.disconnectUser();
       setClient(undefined);
     };
-  }, []);
+  }, [user.uid]);
 
   if (!client) {
     return null;

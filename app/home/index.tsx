@@ -1,12 +1,9 @@
-// app/home/index.tsx
-import notifee, { AndroidImportance } from "@notifee/react-native";
-import { colorPallet } from "@stream-io/video-react-native-sdk";
+import { colorPalette, StreamVideoRN } from "@stream-io/video-react-native-sdk";
 import { analytics } from "analytics";
 import { CallButton } from "components/CallButton";
 import { Calls } from "components/Calls";
 import { Screen } from "components/Screen";
-import * as Notifications from "expo-notifications";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import {
   deleteUser,
@@ -21,94 +18,20 @@ import {
   Alert,
   AlertButton,
   Button,
+  Image,
+  SafeAreaView,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { auth } from "../../firebase";
-import { AuthContext } from "../_layout";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
-const NotificationDemoButton = () => (
-  <Button
-    title="Show Notification"
-    onPress={async () => {
-      const title = "Notification Title";
-      const message = { message: { text: "This is a notification message" } };
-      const remoteMessage = { data: {} };
-      const channelId = "default-channel-id";
-
-      await notifee.displayNotification({
-        title,
-        body: message.message.text,
-        data: remoteMessage.data,
-        android: {
-          channelId,
-          pressAction: {
-            id: "default",
-          },
-          importance: AndroidImportance.HIGH,
-        },
-      });
-    }}
-  />
-);
-
-const deleteAccount = async (user: User) => {
-  analytics.track("deleteAccount", { user });
-  try {
-    await deleteUser(user);
-  } catch (err) {
-    if (err instanceof FirebaseError) {
-      if (err.code === "auth/requires-recent-login") {
-        return Alert.prompt(
-          "Confirm your password to delete account",
-          user.email || "",
-          [
-            {
-              text: "Cancel",
-              onPress(password) {
-                analytics.track("deleteAccountCancelled", { password });
-              },
-            },
-            {
-              text: "Delete",
-              style: "destructive",
-              async onPress(password) {
-                if (!password) {
-                  analytics.track("deleteAccountError", {
-                    err: "no password",
-                  });
-                  return;
-                }
-                if (!user.email) {
-                  analytics.track("deleteAccountError", {
-                    err: "no email",
-                  });
-                  throw new Error("no email");
-                }
-                const reauthenticatedUser = await reauthenticateWithCredential(
-                  user,
-                  EmailAuthProvider.credential(user.email, password)
-                );
-                deleteUser(reauthenticatedUser.user);
-              },
-            },
-          ] satisfies ((text: string) => void) | AlertButton[]
-        );
-      }
-    }
-
-    analytics.track("deleteAccountError", { err });
-    console.error(err);
-  }
-};
+import AppColors from "constants/app.colors";
+import { AuthContext } from "context/AuthContext";
+import { PastCalls } from "components/PastCall";
+import { IncomingCalls } from "components/IncomingCall";
+import { IncomingCallComponent } from "components/IncomingCallComponent";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { AppPNGs } from "constants/app.image";
 
 export default function Home() {
   const { user, isLoading } = useContext(AuthContext);
@@ -119,6 +42,11 @@ export default function Home() {
       router.replace("/");
     }
   }, [user, isLoading]);
+
+  const logOut = async () => {
+    await StreamVideoRN.onPushLogout();
+    signOut(auth);
+  };
 
   if (isLoading) {
     // Optionally display a loading indicator
@@ -131,21 +59,64 @@ export default function Home() {
 
   const getNewCallId = () => `${Date.now()}-${user?.displayName}`;
 
+  const onSetting = () => {
+    router.push(`/home/settings`);
+  };
+
   return (
-    <Screen style={{ gap: 20, justifyContent: "space-between" }}>
-      <Text style={{ fontSize: 42, marginVertical: 30 }}>
-        Hi, {user?.displayName}
-      </Text>
-      <CallButton onPress={() => router.push(`/home/${getNewCallId()}`)} />
-      <Calls />
-      <View style={{ gap: 22, marginVertical: 40 }}>
-        <Button title="Sign out" onPress={() => signOut(auth)} />
-        <Button
-          title="Delete account"
-          onPress={() => deleteAccount(user!)} // Non-null assertion since user is non-null here
-          color={colorPallet.dark.error}
-        />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.userName}>Hi, {user?.displayName}</Text>
+          <Link href="/home/settings" style={styles.iconLink}>
+            <Ionicons
+              name={AppPNGs.IcSetting}
+              style={styles.icon}
+              size={30}
+              color="black"
+            />
+          </Link>
+        </View>
+        <View style={styles.underlineView}></View>
+        <IncomingCallComponent />
+        <PastCalls />
+        <CallButton onPress={() => router.push(`/home/create-call`)} />
       </View>
-    </Screen>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: AppColors.white,
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: AppColors.white,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  iconLink: {
+    padding: 8,
+  },
+  underlineView: {
+    height: 1,
+    backgroundColor: AppColors.border,
+    width: "100%",
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  userName: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  icon: {
+    width: 30,
+    height: 30,
+  },
+});

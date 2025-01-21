@@ -1,32 +1,16 @@
 // app/index.tsx
-import { colorPallet } from "@stream-io/video-react-native-sdk";
+import { colorPalette } from "@stream-io/video-react-native-sdk";
 import { Screen } from "components/Screen";
 import { SignIn } from "components/SignIn";
-import { useRouter } from "expo-router";
-import { useContext, useEffect } from "react";
-import {
-  ActivityIndicator,
-  PermissionsAndroid,
-  Platform,
-  Text,
-  View,
-} from "react-native";
-import { AuthContext } from "./_layout";
+import { useRouter, Link } from "expo-router";
+import React, { useContext, useEffect } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import AppColors from "constants/app.colors";
+import { AuthContext } from "context/AuthContext";
 
-export default function Index() {
+export default function App() {
   const { user, isLoading } = useContext(AuthContext);
   const router = useRouter();
-
-  useEffect(() => {
-    const requestPermissions = async () => {
-      if (Platform.OS !== "android") return;
-      const res = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-      );
-      console.log(res); // 'granted' | 'denied' | 'never_ask_again'
-    };
-    requestPermissions();
-  }, []);
 
   useEffect(() => {
     if (!isLoading && user) {
@@ -45,26 +29,48 @@ export default function Index() {
 
   return (
     <Screen>
-      <Text
-        style={{
-          color: colorPallet.dark.primary,
-          fontSize: 48,
-          fontWeight: "bold",
-          fontStyle: "italic",
-        }}
-      >
-        DFIA
-      </Text>
-      <Text
-        style={{
-          color: colorPallet.dark.secondary,
-          fontSize: 24,
-          marginBottom: 28,
-        }}
-      >
-        Don't Face It Alone
-      </Text>
-      <SignIn />
+      <Text style={styles.title}>{"DFIA"}</Text>
+      <Text style={styles.subtitle}>{"Don't Face It Alone"}</Text>
+      <View style={styles.signInBtn}>
+        <Link href="/signin" style={styles.linkBtn}>
+          <Text style={styles.signInBtnText}>{"Sign In"}</Text>
+        </Link>
+      </View>
+      <View style={styles.signInBtn}>
+        <Link href="/signup" style={styles.linkBtn}>
+          <Text style={styles.signInBtnText}>{"Sign Up"}</Text>
+        </Link>
+      </View>
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    color: colorPalette.colors.primary,
+    fontSize: 48,
+    fontWeight: "bold",
+    fontStyle: "italic",
+  },
+  subtitle: {
+    color: colorPalette.colors.secondary,
+    fontSize: 24,
+    marginBottom: 28,
+  },
+  signInBtn: {
+    backgroundColor: AppColors.blue,
+    borderRadius: 40,
+    borderWidth: 1,
+    marginBottom: 20,
+  },
+  linkBtn: {
+    width: "100%",
+    paddingVertical: 15,
+    paddingHorizontal: 80,
+  },
+  signInBtnText: {
+    color: AppColors.white,
+    fontSize: 18,
+    fontWeight: "500",
+  },
+});

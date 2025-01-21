@@ -1,4 +1,3 @@
-import notifee from "@notifee/react-native";
 import {
   CallingState,
   StreamCall,
@@ -6,28 +5,41 @@ import {
   useCalls,
   useCallStateHooks,
 } from "@stream-io/video-react-native-sdk";
-import { Link } from "expo-router";
-import React from "react";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import React, { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 
 export const Calls = () => {
   const calls = useCalls();
   // handle incoming ring calls
   const [firstIncomingCall] = calls.filter(
-    (call) =>
+    call =>
       call.isCreatedByMe === false &&
-      call.state.callingState === CallingState.RINGING
+      call.state.callingState === CallingState.RINGING,
   );
 
-  if (firstIncomingCall) {
-    notifee.displayNotification({
-      title: "Incoming Call",
-      body: "You have an incoming call",
-      android: {
-        channelId: "default-channel-id",
-      },
-    });
-  }
+  const joinedCalls = calls.filter(
+    call => call.state.callingState === CallingState.JOINED,
+  );
+
+  const navigateToCall = (callId: string) => {
+    router.replace(`/home/join-call/${callId}`);
+  };
+
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params.join && firstIncomingCall?.id) {
+      navigateToCall(firstIncomingCall.id);
+    }
+  }, [params.join, firstIncomingCall?.id]);
+
+  useEffect(() => {
+    const joinedCall = joinedCalls[0];
+    if (joinedCall && params.join) {
+      navigateToCall(joinedCall.id);
+    }
+  }, [joinedCalls, params.join]);
 
   return (
     <View>
@@ -42,7 +54,7 @@ export const Calls = () => {
       <Text style={{ fontSize: 18 }}>
         {calls.length ? "All Calls" : "No calls"}
       </Text>
-      {calls.map((call) => (
+      {calls.map(call => (
         <StreamCall key={call.id} call={call}>
           <CallCard />
         </StreamCall>
@@ -58,16 +70,18 @@ export const CallCard = () => {
     useParticipants,
     useCallCreatedAt,
     useParticipantCount,
+    useCallMembers,
   } = useCallStateHooks();
 
   const callingState = useCallCallingState();
   const participants = useParticipants();
   const createdAt = useCallCreatedAt();
   const participantCount = useParticipantCount();
+  const members = useCallMembers();
 
   if (!call) return;
   return (
-    <Link asChild href={`/home/${call.id}`}>
+    <Link asChild href={`/home/join-call/${call.id}`}>
       <Pressable
         style={{
           padding: 8,
@@ -76,13 +90,13 @@ export const CallCard = () => {
           borderRadius: 8,
           flexDirection: "row",
           gap: 8,
-        }}
-      >
+        }}>
         <Text style={{ fontSize: 18 }}>📞</Text>
         <View>
           <Text>{callingState}</Text>
           <Text>{participantCount} Participants</Text>
-          {participants.map((participant) => (
+          <Text>{members.length} Members</Text>
+          {participants.map(participant => (
             <Text key={participant.userId}>
               {participant.name || participant.userId}
             </Text>

@@ -8,7 +8,11 @@ export const staticNavigateToRingingCall = () => {
   // add any requirements here (like authentication)
   // if (GlobalState.hasAuthentication) {
   //   clearInterval(intervalId);
-  router.push("/home");
+  router.replace("/home");
   // }
   //   }, 300);
+};
+
+export const staticNavigateToCall = () => {
+  router.replace(`/home?join=true`);
 };
