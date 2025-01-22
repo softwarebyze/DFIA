@@ -1,37 +1,22 @@
-import { colorPalette, StreamVideoRN } from "@stream-io/video-react-native-sdk";
-import { analytics } from "analytics";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StreamVideoRN } from "@stream-io/video-react-native-sdk";
 import { CallButton } from "components/CallButton";
-import { Calls } from "components/Calls";
-import { Screen } from "components/Screen";
-import { useRouter, Link } from "expo-router";
-import { FirebaseError } from "firebase/app";
-import {
-  deleteUser,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  signOut,
-  User,
-} from "firebase/auth";
+import { IncomingCallComponent } from "components/IncomingCallComponent";
+import { PastCalls } from "components/PastCall";
+import AppColors from "constants/app.colors";
+import { AppPNGs } from "constants/app.image";
+import { AuthContext } from "context/AuthContext";
+import { Link, useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
 import { useContext, useEffect } from "react";
 import {
   ActivityIndicator,
-  Alert,
-  AlertButton,
-  Button,
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { auth } from "../../firebase";
-import AppColors from "constants/app.colors";
-import { AuthContext } from "context/AuthContext";
-import { PastCalls } from "components/PastCall";
-import { IncomingCalls } from "components/IncomingCall";
-import { IncomingCallComponent } from "components/IncomingCallComponent";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { AppPNGs } from "constants/app.image";
 
 export default function Home() {
   const { user, isLoading } = useContext(AuthContext);
