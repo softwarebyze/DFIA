@@ -3,5 +3,5 @@ const AppPNGs = {
   IcBack: "chevron-back",
   IcVideoCall: "video",
   IcSetting: "settings-sharp",
-};
+} as const;
 export { AppPNGs };
