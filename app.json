@@ -91,10 +91,13 @@
     [
       "expo-notifications",
       {
-        "sounds": ["./assets/ringtone.wav"],
+        "sounds": [
+          "./assets/ringtone.wav"
+        ],
         "enableBackgroundRemoteNotifications": true
       }
-    ]
+    ],
+    "./withXmlnsTools.plugin.js"
   ],
   "owner": "zackebenfeld"
 }
