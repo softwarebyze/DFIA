@@ -14,7 +14,7 @@
     "typedRoutes": true
   },
   "ios": {
-    "supportsTablet": true,
+    "supportsTablet": false,
     "bitcode": false
   },
   "android": {

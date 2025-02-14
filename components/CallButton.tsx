@@ -1,9 +1,7 @@
 import { analytics } from "analytics";
-import { presentProPaywall } from "components/RevenueCat";
+import { presentProPaywall } from "./RevenueCat";
 import AppColors from "constants/app.colors";
-import { AppPNGs } from "constants/app.image";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export const CallButton = (props: { onPress: () => void }) => {
   const onPress = async () => {
@@ -17,15 +15,14 @@ export const CallButton = (props: { onPress: () => void }) => {
   };
   return (
     <View style={styles.container}>
-      <Link
-        href="#"
+      <Pressable
         onPress={event => {
           event.preventDefault();
           onPress();
         }}
         style={styles.linkButton}>
         <Text style={styles.text}>{"Call an Angel"}</Text>
-      </Link>
+      </Pressable>
     </View>
   );
 };
